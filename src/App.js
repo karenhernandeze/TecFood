@@ -8,8 +8,7 @@ class App extends Component {
         return (
             <Router>
                 <Switch>
-                    <Route path="/" exact component={Admin} />
-                    {/*<Redirect from="/" to="/orders/" />*/}
+                    <Route path="/orders" exact component={Admin} />
                 </Switch>git
             </Router>
         )
