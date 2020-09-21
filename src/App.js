@@ -10,7 +10,7 @@ class App extends Component {
                 <Switch>
                     <Route path="/" exact component={Admin} />
                     {/*<Redirect from="/" to="/orders/" />*/}
-                </Switch>
+                </Switch>git
             </Router>
         )
     }
