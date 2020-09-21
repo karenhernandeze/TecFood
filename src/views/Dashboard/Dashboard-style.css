@@ -1,0 +1,26 @@
+.cardCategory {
+    color: #737373;
+    margin: 0;
+    font-size: 14px;
+    margin-top: 0;
+    padding-top: 10px;
+    margin-bottom: 0;
+
+}
+
+.cardTitle {
+    color: #000000;
+    margin-top: 0px;
+    min-height: auto;
+    font-weight: 300;
+    font-family: "Roboto", "Helvetica", "Arial", "sans-serif";
+    margin-bottom: 3px;
+    text-decoration: none;
+}
+
+.stats{
+    color: #a6a6a6;
+    display: inline-flex;
+    font-size: 12px;
+    line-height: 22px;
+}
