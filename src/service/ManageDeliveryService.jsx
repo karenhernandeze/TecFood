@@ -1,8 +1,5 @@
 import axios from 'axios'
-
 const manageDeliveryAPI = 'https://tecfood.herokuapp.com/orders'
-//const manageDeliveryAPI = 'http://localhost:3000/orders'
-
 
 export class ManageDeliveryService {
 

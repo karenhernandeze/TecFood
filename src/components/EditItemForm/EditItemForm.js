@@ -1,0 +1,137 @@
+import React, { Component } from 'react'
+import GridItem from "../../building_blocks/Grid/GridItem.js";
+import GridContainer from "../../building_blocks/Grid/GridContainer.js";
+import Button from "../../building_blocks/CustomButtons/Button.js";
+import Card from "../../building_blocks/Card/Card.js";
+import CardHeader from "../../building_blocks/Card/CardHeader.js";
+import CardBody from "../../building_blocks/Card/CardBody.js";
+import CardFooter from "../../building_blocks/Card/CardFooter.js";
+import ManageItemsService from "../../service/ManageItemsService";
+import TextField from "@material-ui/core/TextField";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import Input from "@material-ui/core/Input";
+
+class EditItemForm extends Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            _id: this.props.match.params.id,
+            name: '',
+            description: '',
+            price: '',
+            availability: true,
+            includedSides: '',
+            restaurantId: "5f52e7ac97345cbcabcfc829"
+        }
+        this.onSubmit = this.onSubmit.bind(this)
+        this.refreshItems = this.refreshItems.bind(this)
+    }
+
+    componentDidMount() {
+        this.refreshItems();
+    }
+
+    refreshItems() {
+        console.log("REFRESH ITEMS ")
+        console.log(this.state._id)
+        console.log(ManageItemsService.retrieveItemById(this.state._id))
+        ManageItemsService.retrieveItemById(this.state._id)
+            .then(
+                response=> {this.setState({
+                    name: response.data.name,
+                    price: response.data.price,
+                    description: response.data.description,
+                    includedSides: response.data.includedSides
+            })}
+        )
+        console.log("STATE")
+        console.log(this.state)
+    }
+
+    onSubmit() {
+        console.log("state "+ this.state.name)
+        console.log("state "+ this.state._id)
+        ManageItemsService.updateItem(this.state._id, this.state)
+            .then(
+                response => {
+                    this.props.history.push(`/items`)
+                    this.setState({ items: response.data })
+                }
+            )
+    }
+
+    handleChange = event => {
+        const { value, name } = event.target;
+        this.setState({
+            ...this.state,
+            [name]: value
+        });
+        console.log("HAndle change")
+        console.log(this.state)
+    };
+
+
+    render() {
+        return (
+            <GridContainer>
+                <GridItem xs={12} sm={12} md={12}>
+                    <Card>
+                        <CardHeader color="success">
+                            <h4 >Edit Profile</h4>
+                            <p >Complete your profile</p>
+                        </CardHeader>
+                        <CardBody>
+                            <GridContainer>
+                                <GridItem xs={12} sm={12} md={5}>
+                                    <TextField
+                                        name="name"
+                                        label={"Name"}
+                                        id="outlined-start-adornment"
+                                        onChange={this.handleChange}
+                                        value={this.state.name}
+                                    />
+                                </GridItem>
+                                <GridItem xs={12} sm={12} md={3}>
+                                    <TextField
+                                        name="description"
+                                        label="Description"
+                                        id="description"
+                                        onChange={this.handleChange}
+                                        value={this.state.description}
+                                    />
+                                </GridItem>
+                            </GridContainer>
+                            <div><br/> </div>
+                            <GridContainer>
+                                <GridItem xs={12} sm={12} md={5}>
+                                    <Input
+                                        name="price"
+                                        label="Price"
+                                        id="price"
+                                        onChange={this.handleChange}
+                                        value={this.state.price}
+                                        startAdornment={<InputAdornment position="start">$</InputAdornment>}
+                                    />
+                                </GridItem>
+                                <GridItem xs={12} sm={12} md={5}>
+                                    <TextField
+                                        name="includedSides"
+                                        label="Included Sides"
+                                        id="included-sides"
+                                        onChange={this.handleChange}
+                                        value={this.state.includedSides}
+                                    />
+                                </GridItem>
+                            </GridContainer>
+                        </CardBody>
+                        <CardFooter>
+                            <Button color="success" onClick={this.onSubmit}>Update</Button>
+                        </CardFooter>
+                    </Card>
+                </GridItem>
+            </GridContainer>
+        )
+    }
+}
+
+export default EditItemForm

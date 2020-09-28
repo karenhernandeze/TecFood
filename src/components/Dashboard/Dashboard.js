@@ -3,12 +3,12 @@ import { makeStyles } from "@material-ui/core/styles";
 import Done from "@material-ui/icons/Done";
 import Block from "@material-ui/icons/Block";
 import AccessTime from "@material-ui/icons/AccessTime";
-import GridItem from "../../components/Grid/GridItem.js";
-import GridContainer from "../../components/Grid/GridContainer.js";
-import Card from "../../components/Card/Card.js";
-import CardHeader from "../../components/Card/CardHeader.js";
-import CardIcon from "../../components/Card/CardIcon.js";
-import CardFooter from "../../components/Card/CardFooter.js";
+import GridItem from "../../building_blocks/Grid/GridItem.js";
+import GridContainer from "../../building_blocks/Grid/GridContainer.js";
+import Card from "../../building_blocks/Card/Card.js";
+import CardHeader from "../../building_blocks/Card/CardHeader.js";
+import CardIcon from "../../building_blocks/Card/CardIcon.js";
+import CardFooter from "../../building_blocks/Card/CardFooter.js";
 import "./Dashboard-style.css"
 import styles from "../../assets/jss/material-dashboard-react/views/dashboardStyle.js";
 import {AirportShuttleTwoTone} from "@material-ui/icons";
@@ -220,82 +220,3 @@ class DashboardPage extends Component {
 }
 
 export default DashboardPage
-
-
-//
-//
-// <Dialog
-// open={this.state.open}
-// onClose={this.handleClose}
-// aria-labelledby="id"
-// aria-describedby="alert-dialog-description"
-//     >
-//     {
-//         this.state.orders.map( order => (
-//             <DialogTitle
-//                 id = "id"
-//
-//             >
-//                 {order.customerName}
-//             </DialogTitle>
-//         ))
-//     }
-// <DialogContent>
-//     <DialogContentText id="alert-dialog-description">
-//         Let Google  even when no apps are running.
-//     </DialogContentText>
-// </DialogContent>
-// <DialogActions>
-//     <Button onClick={this.handleClose} color="primary">
-//         Disagree
-//     </Button>
-//     <Button onClick={this.handleClose} color="primary" autoFocus>
-//         Agree
-//     </Button>
-// </DialogActions>
-// </Dialog>
-
-//
-//
-
-//
-// export default function AlertDialog() {
-//     const [open, setOpen] = React.useState(false);
-//
-//     const handleClickOpen = () => {
-//         setOpen(true);
-//     };
-//
-//     const handleClose = () => {
-//         setOpen(false);
-//     };
-//
-//     return (
-//         <div>
-//             <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-//                 Open alert dialog
-//             </Button>
-//             <Dialog
-//                 open={open}
-//                 onClose={handleClose}
-//                 aria-labelledby="alert-dialog-title"
-//                 aria-describedby="alert-dialog-description"
-//             >
-//                 <DialogTitle id="alert-dialog-title">{"Use Google's location service?"}</DialogTitle>
-//                 <DialogContent>
-//                     <DialogContentText id="alert-dialog-description">
-//                         Let Google  even when no apps are running.
-//                     </DialogContentText>
-//                 </DialogContent>
-//                 <DialogActions>
-//                     <Button onClick={handleClose} color="primary">
-//                         Disagree
-//                     </Button>
-//                     <Button onClick={handleClose} color="primary" autoFocus>
-//                         Agree
-//                     </Button>
-//                 </DialogActions>
-//             </Dialog>
-//         </div>
-//     );
-// }

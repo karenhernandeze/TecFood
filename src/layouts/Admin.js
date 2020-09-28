@@ -2,9 +2,9 @@ import React from "react";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 // core components
-import Navbar from "../components/Navbars/Navbar";
+import Navbar from "../building_blocks/Navbars/Navbar";
 import styles from "../assets/jss/material-dashboard-react/layouts/adminStyle"
-import DashboardPage from "../views/Dashboard/Dashboard";
+import DashboardPage from "../components/Dashboard/Dashboard";
 const useStyles = makeStyles(styles);
 
 export default function Admin() {
