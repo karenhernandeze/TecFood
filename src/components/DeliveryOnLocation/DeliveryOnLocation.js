@@ -15,6 +15,8 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import ManageDeliveryService from "../../service/ManageDeliveryService";
 import Danger from "../../building_blocks/Typography/Danger";
 import ErrorIcon from '@material-ui/icons/Error';
+import Snackbar from "../../building_blocks/Snackbar/Snackbar";
+import AddAlert from "@material-ui/icons/AddAlert";
 class DeliveryOnLocation extends Component {
     constructor(props) {
         super(props)
@@ -32,7 +34,9 @@ class DeliveryOnLocation extends Component {
             },
             open:false,
             id: '',
-            existence: false
+            existence: false,
+            message: null,
+            tc: false
         }
         this.searchOrderById = this.searchOrderById.bind(this)
     }
@@ -96,15 +100,17 @@ class DeliveryOnLocation extends Component {
     handleClose = event => {
         this.setState({
             ...this.state,
-            open: false
+            open: false,
+            tc: false
         });
     };
 
     //SET ORDER AS MISSED
-    setOrderAsMissed (id){
+    setOrderAsMissed (id, orderNumb){
         ManageDeliveryService.setOrderAsMissed(id).then(
             response => {
-                console.log(response)
+                this.setState({tc: true, message: `Order Number: ${orderNumb} , was successfully updated to MISSED` })
+                window.setTimeout(this.handleClose, 5000);
             }
         )
         this.setState({
@@ -114,36 +120,36 @@ class DeliveryOnLocation extends Component {
     }
 
     //SET ORDER AS DELIVERED
-    setOrderAsDelivered(id){
+    setOrderAsDelivered(id, orderNumb){
         ManageDeliveryService.setOrderAsDelivered(id).then(
             response => {
+                this.setState({tc: true, message: `Order Number: ${orderNumb} , was successfully delivered` })
+                window.setTimeout(this.handleClose, 5000);
                 console.log(response)
             }
         )
-        // this.setState( {
-        //     paidOnCheckout: true
-        // });
-        // this.setState(prevState => ({
-        //     ...this.state,
-        //     open: !prevState.open,
-        //     order: {
-        //         _id: id,
-        //         customerName: this.state.customerName,
-        //         restaurantId: this.state.restaurantId,
-        //         customerId: this.state.customerId,
-        //         orderDescription: this.state.orderDescription,
-        //         orderNumber: this.state.orderNumber,
-        //         orderStatus: this.state.orderStatus,
-        //         amount: this.state.amount,
-        //         paidOnCheckout: true
-        //     }
-        // }));
+        this.setState({
+            ...this.state,
+            open: false
+        });
     }
-
 
     render() {
         return (
             <GridContainer>
+                <GridContainer>
+                    <GridItem xs={12} sm={12} md={12}>
+                        <Snackbar
+                            place="tc"
+                            color="info"
+                            icon={AddAlert}
+                            message={this.state.message}
+                            open={this.state.tc}
+                            closeNotification={this.handleClose}
+                            close
+                        />
+                    </GridItem>
+                </GridContainer>
                 <GridItem xs={12} sm={12} md={12}>
                     <Card>
                         <CardHeader color="info">
@@ -221,22 +227,28 @@ class DeliveryOnLocation extends Component {
                         </DialogContent>
                         <DialogActions>
                             {
-                                this.state.order.orderStatus === "Ready" ? (
-                                    <>
-                                        <Button onClick={() => {this.setOrderAsMissed(this.state.order._id)}} color="danger">
-                                            Missed
-                                        </Button>
-                                        <Button onClick={ () => {this.setOrderAsDelivered(this.state.order._id)}} color="success" autoFocus>
+                                this.state.existence === false ?
+
+                                    <Button onClick={this.handleClose} color="success">
+                                        OK
+                                    </Button> :
+
+                                    this.state.order.orderStatus === "Ready" ? (
+                                        <>
+                                            <Button onClick={() => {this.setOrderAsMissed(this.state.order._id, this.state.order.orderNumber)}} color="danger">
+                                                Missed
+                                            </Button>
+                                            <Button onClick={ () => {this.setOrderAsDelivered(this.state.order._id, this.state.order.orderNumber)}} color="success" autoFocus>
+                                                Delivered
+                                            </Button>
+                                        </>) : this.state.order.orderStatus === "Missed" ?
+                                        (<Button onClick={ () => {this.setOrderAsDelivered(this.state.order._id, this.state.order.orderNumber)}} color="success" autoFocus>
                                             Delivered
-                                        </Button>
-                                    </>) : this.state.order.orderStatus === "Missed" ?
-                                    (<Button onClick={ () => {this.setOrderAsDelivered(this.state.order._id)}} color="success" autoFocus>
-                                        Delivered
-                                    </Button>) : this.state.order.orderStatus === "Delivered" ? (
-                                        <Button onClick={ () => {this.setOrderAsMissed(this.state.order._id)}} color="danger" autoFocus>
-                                            Missed
-                                        </Button>
-                                    ) : null
+                                        </Button>) : this.state.order.orderStatus === "Delivered" ? (
+                                            <Button onClick={ () => {this.setOrderAsMissed(this.state.order._id, this.state.order.orderNumber)}} color="danger" autoFocus>
+                                                Missed
+                                            </Button>
+                                        ) : null
                             }
                         </DialogActions>
                     </Dialog>

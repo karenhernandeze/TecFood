@@ -14,6 +14,8 @@ import ManageRestaurantService from "../../service/ManageRestaurantService";
 import Navbar from "../../building_blocks/Navbars/Navbar";
 import TableRestaurant from "../TableRestaurants/TableRestaurant";
 import "../Form-styles.css"
+import IconButton from "@material-ui/core/IconButton";
+import {Visibility, VisibilityOff} from "@material-ui/icons";
 
 class EditRestaurantForm extends Component {
     constructor(props) {
@@ -27,7 +29,14 @@ class EditRestaurantForm extends Component {
             restManagerName:'',
             restManagerEmail:'',
             restManagerPassword: '',
-            restManagerPhone: ''
+            restManagerPhone: '',
+            errorName: false,
+            errorRFC: false,
+            errorLocation: false,
+            errorRestManagerName: false,
+            errorRestManagerEmail: false,
+            errorRestManagerPassword: false,
+            errorRestManagerPhone: false
         }
         this.onSubmit = this.onSubmit.bind(this)
         this.refreshRestaurants = this.refreshRestaurants.bind(this)
@@ -62,15 +71,23 @@ class EditRestaurantForm extends Component {
     }
 
     onSubmit() {
-        console.log("state "+ this.state.name)
-        console.log("state "+ this.state._id)
-        ManageRestaurantService.updateRestaurant(this.state._id, this.state)
-            .then(
-                response => {
-                    this.props.history.push(`/restaurants`)
-                    //this.setState({ restaurants: response.data })
-                }
-            )
+        if (this.state.name == "" || this.state.rfc == '' || this.state.location == '' || this.state.restManagerName == '' || this.state.restManagerEmail == "" || this.state.restManagerPassword == '' || this.state.restManagerPhone == ''){
+            this.state.name == '' ? this.setState({errorName: true}) : this.setState({errorName: false})
+            this.state.rfc == '' ? this.setState({errorRFC: true}) : this.setState({errorRFC: false})
+            this.state.location == '' ? this.setState({errorLocation: true}) : this.setState({errorLocation: false})
+            this.state.restManagerName == '' ? this.setState({errorRestManagerName: true}) : this.setState({errorRestManagerName: false})
+            this.state.restManagerEmail == '' ? this.setState({errorRestManagerEmail: true}) : this.setState({errorRestManagerEmail: false})
+            this.state.restManagerPassword == '' ? this.setState({errorRestManagerPassword: true}) : this.setState({errorRestManagerPassword: false})
+            this.state.restManagerPhone == '' ? this.setState({errorRestManagerPhone: true}) : this.setState({errorRestManagerPhone: false})
+        }else{
+            ManageRestaurantService.updateRestaurant(this.state._id, this.state)
+                .then(
+                    response => {
+                        this.props.history.push(`/restaurants`)
+                        //this.setState({ restaurants: response.data })
+                    }
+                )
+        }
     }
 
     handleChange = event => {
@@ -83,6 +100,17 @@ class EditRestaurantForm extends Component {
         console.log(this.state)
     };
 
+    handleClickShowPassword = event => {
+        this.state.showPassword == true ?
+            this.setState({
+                ...this.state,
+                showPassword: false
+            }) :
+            this.setState({
+                ...this.state,
+                showPassword: true
+            })
+    };
 
     render() {
         return (
@@ -101,6 +129,7 @@ class EditRestaurantForm extends Component {
                                     <GridContainer>
                                         <GridItem xs={12} sm={12} md={6}>
                                             <TextField
+                                                error={this.state.errorName}
                                                 fullWidth="25px"
                                                 name="name"
                                                 label="Name"
@@ -111,6 +140,7 @@ class EditRestaurantForm extends Component {
                                         </GridItem>
                                         <GridItem xs={12} sm={12} md={6}>
                                             <TextField
+                                                error={this.state.errorRFC}
                                                 fullWidth="25px"
                                                 name="rfc"
                                                 label="RFC"
@@ -124,6 +154,7 @@ class EditRestaurantForm extends Component {
                                     <GridContainer>
                                         <GridItem xs={12} sm={12} md={6}>
                                             <TextField
+                                                error={this.state.errorLocation}
                                                 fullWidth="25px"
                                                 name="location"
                                                 label="Location"
@@ -134,6 +165,7 @@ class EditRestaurantForm extends Component {
                                         </GridItem>
                                         <GridItem xs={12} sm={12} md={6}>
                                             <TextField
+                                                error={this.state.errorRestManagerName}
                                                 fullWidth="25px"
                                                 name="restManagerName"
                                                 label="Manager Name"
@@ -147,6 +179,7 @@ class EditRestaurantForm extends Component {
                                     <GridContainer>
                                         <GridItem xs={12} sm={12} md={6}>
                                             <TextField
+                                                error={this.state.errorRestManagerEmail}
                                                 fullWidth="25px"
                                                 name="restManagerEmail"
                                                 label="Manager Email"
@@ -157,26 +190,40 @@ class EditRestaurantForm extends Component {
                                         </GridItem>
                                         <GridItem xs={12} sm={12} md={6}>
                                             <TextField
-                                                fullWidth="25px"
-                                                type="password"
-                                                name="restManagerPassword"
-                                                label="Manager Password"
-                                                id="restManagerPassword"
+                                                error={this.state.errorRestManagerPhone}
+                                                fullWidth="10px"
+                                                name="restManagerPhone"
+                                                label="Manager Phone"
+                                                id="restManagerPhone"
                                                 onChange={this.handleChange}
-                                                value={this.state.restManagerPassword}
+                                                value={this.state.restManagerPhone}
                                             />
                                         </GridItem>
                                     </GridContainer>
                                     <div><br/> </div>
                                     <GridContainer>
                                         <GridItem xs={12} sm={12} md={6}>
-                                            <TextField
+                                            <Input
+                                                error={this.state.errorRestManagerPassword}
                                                 fullWidth="25px"
-                                                name="restManagerPhone"
-                                                label="Manager Phone"
-                                                id="restManagerPhone"
+                                                type={this.state.showPassword ? 'text' : 'password'}
+                                                name="restManagerPassword"
+                                                placeholder="Manager Password"
+                                                id="restManagerPassword"
                                                 onChange={this.handleChange}
-                                                value={this.state.restManagerPhone}
+                                                value={this.state.restManagerPassword}
+                                                endAdornment={
+                                                    <InputAdornment position="end">
+                                                        <IconButton
+                                                            aria-label="toggle password visibility"
+                                                            onClick={this.handleClickShowPassword}
+                                                            onMouseDown={this.handleMouseDownPassword}
+                                                            edge="end"
+                                                        >
+                                                            {(this.state.showPassword) ? <Visibility/> : <VisibilityOff/>}
+                                                        </IconButton>
+                                                    </InputAdornment>
+                                                }
                                             />
                                         </GridItem>
                                     </GridContainer>

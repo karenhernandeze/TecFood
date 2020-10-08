@@ -12,6 +12,8 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import { withRouter } from 'react-router-dom';
 import ManageRestaurantService from "../../service/ManageRestaurantService";
+import Snackbar from "../../building_blocks/Snackbar/Snackbar";
+import AddAlert from "@material-ui/icons/AddAlert";
 
 class TableRestaurant extends Component {
     constructor(props) {
@@ -27,9 +29,11 @@ class TableRestaurant extends Component {
                 restManagerName:'',
                 restManagerEmail:'',
                 restManagerPassword: '',
-                restManagerPhone: ''
+                restManagerPhone: '',
+                tc: false
             },
-            checked: false
+            checked: false,
+            message: null
         }
         this.addNewRestaurant = this.addNewRestaurant.bind(this);
         this.handleChange = this.handleChange.bind(this);
@@ -65,20 +69,27 @@ class TableRestaurant extends Component {
         if (restaurant.availability == true){
             ManageRestaurantService.disableAvailability(restaurant._id).then(
                 response => {
-                    //this.setState({checked: false})
-                    console.log("enable")
+                    this.setState({ tc: true, message: `Restaurant:  ${restaurant.name} , was successfully disabled` })
+                    window.setTimeout(this.handleClose, 5000);
                     this.refreshRestaurants()
                 }
             )
         } else if (restaurant.availability == false){
             ManageRestaurantService.enableAvailability(restaurant._id).then(
                 response => {
-                    console.log("DISABLE")
-                    this.refreshRestaurants();
+                    this.setState({tc: true, message: `\`Restaurant:  ${restaurant.name} , was successfully enabled` })
+                    window.setTimeout(this.handleClose, 5000);
+                    this.refreshRestaurants()
                 }
             )
         }
     }
+
+    handleClose = event => {
+        this.setState({
+            tc: false
+        });
+    };
 
     updateItem(id) {
         //console.log('update ' + id)
@@ -89,6 +100,19 @@ class TableRestaurant extends Component {
     render(){
         return(
             <GridContainer>
+                <GridContainer>
+                    <GridItem xs={12} sm={12} md={12}>
+                        <Snackbar
+                            place="tc"
+                            color="info"
+                            icon={AddAlert}
+                            message={this.state.message}
+                            open={this.state.tc}
+                            // closeNotification={this.handleClose}
+                            close
+                        />
+                    </GridItem>
+                </GridContainer>
                 <GridItem xs={12} sm={12} md={12}>
                     <Card>
                         <CardHeader color="rose">
@@ -113,6 +137,7 @@ class TableRestaurant extends Component {
                                                 [restaurant.restManagerPhone],
                                                 [
                                                     <FormControlLabel
+                                                        onClick={this.showNotification}
                                                         control={<Checkbox color={"default"} checked={restaurant.availability} onChange={ () => {this.handleChange(restaurant)}}/>}
                                                         labelPlacement="top"
                                                     />

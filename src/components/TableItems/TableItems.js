@@ -13,7 +13,6 @@ import Checkbox from "@material-ui/core/Checkbox";
 import { withRouter } from 'react-router-dom';
 import Snackbar from "../../building_blocks/Snackbar/Snackbar.js";
 import AddAlert from "@material-ui/icons/AddAlert";
-//import Snackbar from '@material-ui/core/Snackbar';
 
 class TableItems extends Component {
     constructor(props) {

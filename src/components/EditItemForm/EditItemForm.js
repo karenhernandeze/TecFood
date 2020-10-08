@@ -24,7 +24,11 @@ class EditItemForm extends Component {
             image:'',
             availability: true,
             includedSides: '',
-            restaurantId: "5f52e7ac97345cbcabcfc829"
+            restaurantId: "5f52e7ac97345cbcabcfc829",
+            errorName: false,
+            errorDescription: false,
+            errorPrice: false,
+            errorSides: false
         }
         this.onSubmit = this.onSubmit.bind(this)
         this.refreshItems = this.refreshItems.bind(this)
@@ -46,29 +50,31 @@ class EditItemForm extends Component {
                     description: response.data.description,
                     includedSides: response.data.includedSides,
                     image: response.data.image
-                })
-                    console.log(response)
-                }
+                })}
             )
-        console.log("STATE")
-        console.log(this.state)
     }
 
     onSubmit = async() => {
-        const linkPhoto = await this.onSubmitImage()
-        console.log(linkPhoto)
-        this.setState({
-            ...this.state,
-            image: linkPhoto
-        });
-
-        ManageItemsService.updateItem(this.state._id, this.state)
-            .then(
-                response => {
-                    this.props.history.push(`/items`)
-                    this.setState({ items: response.data })
-                }
-            )
+        if (this.state.name == "" || this.state.description == '' || this.state.price == '' || this.state.includedSides == ''){
+            this.state.name == '' ? this.setState({errorName: true}) : this.setState({errorName: false})
+            this.state.description == '' ? this.setState({errorDescription: true}) : this.setState({errorName: false})
+            this.state.price == '' ? this.setState({errorPrice: true}) : this.setState({errorName: false})
+            this.state.includedSides == '' ? this.setState({errorSides: true}) : this.setState({errorName: false})
+        }else{
+            const linkPhoto = await this.onSubmitImage()
+            console.log(linkPhoto)
+            this.setState({
+                ...this.state,
+                image: linkPhoto
+            });
+            ManageItemsService.updateItem(this.state._id, this.state)
+                .then(
+                    response => {
+                        this.props.history.push(`/items`)
+                        this.setState({ items: response.data })
+                    }
+                )
+        }
     }
 
     //UPLOAD IMAGE CHANGE
@@ -80,7 +86,7 @@ class EditItemForm extends Component {
         console.log("ON CHANGE")
         console.log(event)
         console.log(event.target)
-        console.log(event.target.file)
+        console.log(this.state)
         console.log(event.target.files[1])
     };
 
@@ -124,6 +130,7 @@ class EditItemForm extends Component {
                                     <GridContainer>
                                         <GridItem xs={12} sm={12} md={6}>
                                             <TextField
+                                                error={this.state.errorName}
                                                 fullWidth="25px"
                                                 name="name"
                                                 label={"Name"}
@@ -134,6 +141,7 @@ class EditItemForm extends Component {
                                         </GridItem>
                                         <GridItem xs={12} sm={12} md={6}>
                                             <TextField
+                                                error={this.state.errorDescription}
                                                 fullWidth="25px"
                                                 name="description"
                                                 label="Description"
@@ -147,6 +155,7 @@ class EditItemForm extends Component {
                                     <GridContainer>
                                         <GridItem xs={12} sm={12} md={6}>
                                             <Input
+                                                error={this.state.errorPrice}
                                                 fullWidth="25px"
                                                 name="price"
                                                 label="Price"
@@ -158,6 +167,7 @@ class EditItemForm extends Component {
                                         </GridItem>
                                         <GridItem xs={12} sm={12} md={6}>
                                             <TextField
+                                                error={this.state.errorSides}
                                                 fullWidth="25px"
                                                 name="includedSides"
                                                 label="Included Sides"
@@ -177,7 +187,7 @@ class EditItemForm extends Component {
                                                         <br/>
                                                         <div>
                                                             {
-                                                                ((this.state.image) == null || (this.state.image) == "") ?
+                                                                ((this.state.image) == null || (this.state.image) == "" || (this.state.image) !== String) ?
                                                                     <p >none</p> :
                                                                     <img src={this.state.image}/>
                                                             }

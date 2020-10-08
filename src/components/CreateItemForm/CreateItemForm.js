@@ -37,13 +37,10 @@ class CreateItemForm extends Component {
 
     addItemsClicked = async () => {
         if (this.state.name == "" || this.state.description == '' || this.state.price == '' || this.state.includedSides == ''){
-            //TRIES A SWITCH STATEMENTS, IFS AND TERNARY
-            this.setState({
-                ...this.state,
-                errorName: true
-            })
-            console.log('IF CYCLE')
-            console.log(this.state)
+            this.state.name == '' ? this.setState({errorName: true}) : this.setState({errorName: false})
+            this.state.description == '' ? this.setState({errorDescription: true}) : this.setState({errorName: false})
+            this.state.price == '' ? this.setState({errorPrice: true}) : this.setState({errorName: false})
+            this.state.includedSides == '' ? this.setState({errorSides: true}) : this.setState({errorName: false})
         }else{
             const linkPhoto = await this.onSubmit()
             console.log(linkPhoto)
@@ -51,7 +48,6 @@ class CreateItemForm extends Component {
                 ...this.state,
                 image: linkPhoto
             });
-
             ManageItemsService.createNewItem(this.state)
                 .then(
                     response => {
@@ -136,6 +132,7 @@ class CreateItemForm extends Component {
                                         <GridItem xs={12} sm={12} md={6}>
                                             <TextField
                                                 error={this.state.errorDescription}
+                                                //                                                error={this.state.description === '' ? true : false}
                                                 fullWidth="25px"
                                                 name="description"
                                                 label="Description *"
