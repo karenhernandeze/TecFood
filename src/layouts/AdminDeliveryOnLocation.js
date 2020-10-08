@@ -4,20 +4,20 @@ import { makeStyles } from "@material-ui/core/styles";
 // core components
 import Navbar from "../building_blocks/Navbars/Navbar";
 import styles from "../assets/jss/material-dashboard-react/layouts/adminStyle"
-import DashboardPage from "../components/Dashboard_DeliveryRestaurant/Dashboard_DeliveryRestaurant";
+import DeliveryOnLocation from "../components/DeliveryOnLocation/DeliveryOnLocation";
 
 const useStyles = makeStyles(styles);
 
-export default function Admin() {
+export default function AdminDeliveryOnLocation() {
     // styles
     const classes = useStyles();
-
+//NOT FINISHED YET
     return (
         <div>
             <div>
                 <Navbar/>
                 <div className={classes.content}>
-                    <DashboardPage/>
+                    <DeliveryOnLocation/>
                 </div>
             </div>
         </div>

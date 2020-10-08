@@ -1,13 +1,11 @@
 import axios from 'axios'
-const manageItemAPI = 'https://tecfood.herokuapp.com/api/' +
-    'restaurant/5f52e7ac97345cbcabcfc829/item'
-const url = 'https://api.cloudinary.com/v1_1/dzuxehghe/image/upload';
+const manageRestaurantAPI = 'https://tecfood.herokuapp.com/api/restaurant'
 
-export class ManageItemsService {
+export class ManageRestaurantService {
 
-    async retrieveAllItems() {
+    async retrieveAllRestaurants() {
         try{
-            const data =  axios.get(manageItemAPI);
+            const data =  axios.get(manageRestaurantAPI);
             return data;
         }catch (err) {
             console.log(err);
@@ -15,9 +13,9 @@ export class ManageItemsService {
         }
     }
 
-    async retrieveItemById(id) {
+    async retrieveRestaurantById(id) {
         try{
-            const data =  axios.get(`${manageItemAPI}/${id}`);
+            const data =  axios.get(`${manageRestaurantAPI}/${id}`);
             return data;
         }catch (err) {
             console.log(err);
@@ -28,7 +26,7 @@ export class ManageItemsService {
     async disableAvailability(id) {
         console.log( "disableAvailability")
         try{
-            const data =  axios.put(`${manageItemAPI}/disable/${id}`);
+            const data =  axios.put(`${manageRestaurantAPI}/disable/${id}`);
             return data;
         }catch (err) {
             console.log(err);
@@ -39,7 +37,7 @@ export class ManageItemsService {
     async enableAvailability(id) {
         console.log( "enable")
         try{
-            const data =  axios.put(`${manageItemAPI}/enable/${id}`);
+            const data =  axios.put(`${manageRestaurantAPI}/enable/${id}`);
             return data;
         }catch (err) {
             console.log(err);
@@ -47,10 +45,10 @@ export class ManageItemsService {
         }
     }
 
-    async createNewItem(item) {
+    async createNewRestaurant(restaurant) {
         console.log( "create new")
         try{
-            const data =  axios.post(`${manageItemAPI}`, item);
+            const data =  axios.post(`${manageRestaurantAPI}`, restaurant);
             return data;
         }catch (err) {
             console.log(err);
@@ -58,27 +56,16 @@ export class ManageItemsService {
         }
     }
 
-    async updateItem(id, item) {
+    async updateRestaurant(id, restaurant) {
         console.log( "UPDATE FORM")
         try{
-            const data =  axios.put(`${manageItemAPI}/${id}`, item);
+            const data =  axios.put(`${manageRestaurantAPI}/${id}`, restaurant);
             return data;
         }catch (err) {
-            console.log(err);
-            return err.message
-        }
-    }
-
-    async updloadImage(formData){
-        try{
-            const res = await axios.post(url, formData);
-            const imageUrl = res.data.secure_url;
-            return imageUrl;
-        } catch (err){
             console.log(err);
             return err.message
         }
     }
 };
 
-export default new ManageItemsService();
+export default new ManageRestaurantService();

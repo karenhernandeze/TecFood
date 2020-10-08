@@ -19,3 +19,8 @@
     margin-bottom: 3px;
     text-decoration: none;
 }
+
+img {
+    width: 150px;
+    height: auto;
+}

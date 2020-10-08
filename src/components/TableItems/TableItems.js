@@ -9,9 +9,11 @@ import ManageItemsService from "../../service/ManageItemsService";
 import "./TableItem-style.css"
 import Button from "../../building_blocks/CustomButtons/Button"
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import {green} from "@material-ui/core/colors";
 import Checkbox from "@material-ui/core/Checkbox";
 import { withRouter } from 'react-router-dom';
+import Snackbar from "../../building_blocks/Snackbar/Snackbar.js";
+import AddAlert from "@material-ui/icons/AddAlert";
+//import Snackbar from '@material-ui/core/Snackbar';
 
 class TableItems extends Component {
     constructor(props) {
@@ -26,9 +28,11 @@ class TableItems extends Component {
                 includedSides:'',
                 name:'',
                 price:'',
-                restaurantId: ''
+                restaurantId: '',
+                tc: false
             },
-            checked: false
+            checked: false,
+            message: null
         }
         this.addNewItem = this.addNewItem.bind(this);
         this.handleChange = this.handleChange.bind(this);
@@ -65,20 +69,28 @@ class TableItems extends Component {
         if (item.availability == true){
             ManageItemsService.disableAvailability(item._id).then(
                 response => {
-                    //this.setState({checked: false})
-                    console.log("enable")
+                    this.setState({ tc: true, message: `Item:  ${item.name} , was successfully disabled` })
+                    window.setTimeout(this.handleClose, 5000);
                     this.refreshItems()
+
                 }
             )
         } else if (item.availability == false){
             ManageItemsService.enableAvailability(item._id).then(
                 response => {
-                    console.log("DISABLE")
-                    this.refreshItems();
+                    this.setState({tc: true, message: `Item:  ${item.name} , was successfully enabled` })
+                    window.setTimeout(this.handleClose, 5000);
+                    this.refreshItems()
                 }
             )
         }
     }
+
+    handleClose = event => {
+        this.setState({
+            tc: false
+        });
+    };
 
     updateItem(id) {
         //console.log('update ' + id)
@@ -88,6 +100,19 @@ class TableItems extends Component {
     render(){
         return(
             <GridContainer>
+                <GridContainer>
+                    <GridItem xs={12} sm={12} md={12}>
+                        <Snackbar
+                            place="tc"
+                            color="info"
+                            icon={AddAlert}
+                            message={this.state.message}
+                            open={this.state.tc}
+                            // closeNotification={this.handleClose}
+                            close
+                        />
+                    </GridItem>
+                </GridContainer>
                 <GridItem xs={12} sm={12} md={12}>
                     <Card>
                         <CardHeader color="success">
@@ -107,10 +132,14 @@ class TableItems extends Component {
                                                 [item.name],
                                                 [item.description],
                                                 [item.price],
-                                                [item.image],
+                                                [
+                                                    <img src={item.image}/>
+
+                                                ],
                                                 [
                                                     <FormControlLabel
-                                                        control={<Checkbox color={"default"} checked={item.availability} onChange={ () => {this.handleChange(item)}}/>}
+                                                        onClick={this.showNotification}
+                                                        control={<Checkbox color={"default"} checked={item.availability}  onChange={ () => {this.handleChange(item)}}/>}
                                                         labelPlacement="top"
                                                     />
                                                 ],
