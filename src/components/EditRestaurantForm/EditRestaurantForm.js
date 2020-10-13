@@ -129,6 +129,7 @@ class EditRestaurantForm extends Component {
                                     <GridContainer>
                                         <GridItem xs={12} sm={12} md={6}>
                                             <TextField
+                                                required
                                                 error={this.state.errorName}
                                                 fullWidth="25px"
                                                 name="name"
@@ -140,6 +141,7 @@ class EditRestaurantForm extends Component {
                                         </GridItem>
                                         <GridItem xs={12} sm={12} md={6}>
                                             <TextField
+                                                required
                                                 error={this.state.errorRFC}
                                                 fullWidth="25px"
                                                 name="rfc"
@@ -154,6 +156,7 @@ class EditRestaurantForm extends Component {
                                     <GridContainer>
                                         <GridItem xs={12} sm={12} md={6}>
                                             <TextField
+                                                required
                                                 error={this.state.errorLocation}
                                                 fullWidth="25px"
                                                 name="location"
@@ -165,6 +168,7 @@ class EditRestaurantForm extends Component {
                                         </GridItem>
                                         <GridItem xs={12} sm={12} md={6}>
                                             <TextField
+                                                required
                                                 error={this.state.errorRestManagerName}
                                                 fullWidth="25px"
                                                 name="restManagerName"
@@ -179,6 +183,7 @@ class EditRestaurantForm extends Component {
                                     <GridContainer>
                                         <GridItem xs={12} sm={12} md={6}>
                                             <TextField
+                                                required
                                                 error={this.state.errorRestManagerEmail}
                                                 fullWidth="25px"
                                                 name="restManagerEmail"
@@ -190,6 +195,7 @@ class EditRestaurantForm extends Component {
                                         </GridItem>
                                         <GridItem xs={12} sm={12} md={6}>
                                             <TextField
+                                                required
                                                 error={this.state.errorRestManagerPhone}
                                                 fullWidth="10px"
                                                 name="restManagerPhone"
@@ -208,7 +214,7 @@ class EditRestaurantForm extends Component {
                                                 fullWidth="25px"
                                                 type={this.state.showPassword ? 'text' : 'password'}
                                                 name="restManagerPassword"
-                                                placeholder="Manager Password"
+                                                placeholder="Manager Password *"
                                                 id="restManagerPassword"
                                                 onChange={this.handleChange}
                                                 value={this.state.restManagerPassword}

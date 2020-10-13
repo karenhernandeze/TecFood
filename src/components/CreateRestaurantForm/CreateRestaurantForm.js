@@ -105,10 +105,11 @@ class CreateRestaurantForm extends Component {
                                     <GridContainer>
                                         <GridItem xs={12} sm={12} md={6}>
                                             <TextField
+                                                required
                                                 error={this.state.errorName}
                                                 fullWidth="25px"
                                                 name="name"
-                                                label="Name"
+                                                label="Name "
                                                 id="name"
                                                 onChange={this.handleChange}
                                                 value={this.name}
@@ -116,10 +117,11 @@ class CreateRestaurantForm extends Component {
                                         </GridItem>
                                         <GridItem xs={12} sm={12} md={6}>
                                             <TextField
+                                                required
                                                 error={this.state.errorRFC}
                                                 fullWidth="25px"
                                                 name="rfc"
-                                                label="RFC"
+                                                label="RFC "
                                                 id="rfc"
                                                 onChange={this.handleChange}
                                                 defaultValue={this.rfc}
@@ -130,10 +132,11 @@ class CreateRestaurantForm extends Component {
                                     <GridContainer>
                                         <GridItem xs={12} sm={12} md={6}>
                                             <TextField
+                                                required
                                                 error={this.state.errorLocation}
                                                 fullWidth="25px"
                                                 name="location"
-                                                label="Location"
+                                                label="Location "
                                                 id="location"
                                                 onChange={this.handleChange}
                                                 defaultValue={this.location}
@@ -141,6 +144,7 @@ class CreateRestaurantForm extends Component {
                                         </GridItem>
                                         <GridItem xs={12} sm={12} md={6}>
                                             <TextField
+                                                required
                                                 error={this.state.errorRestManagerName}
                                                 fullWidth="25px"
                                                 name="restManagerName"
@@ -167,10 +171,11 @@ class CreateRestaurantForm extends Component {
                                         </GridItem>
                                         <GridItem xs={12} sm={12} md={6}>
                                             <TextField
+                                                required
                                                 error={this.state.errorRestManagerPhone}
                                                 fullWidth="10px"
                                                 name="restManagerPhone"
-                                                label="Manager Phone"
+                                                label="Manager Phone "
                                                 id="restManagerPhone"
                                                 onChange={this.handleChange}
                                                 defaultValue={this.restManagerPhone}
@@ -181,11 +186,12 @@ class CreateRestaurantForm extends Component {
                                     <GridContainer>
                                         <GridItem xs={12} sm={12} md={6}>
                                             <Input
+                                                required
                                                 error={this.state.errorRestManagerPassword}
                                                 fullWidth="25px"
                                                 type={this.state.showPassword ? 'text' : 'password'}
                                                 name="restManagerPassword"
-                                                placeholder="Manager Password"
+                                                placeholder="Manager Password *"
                                                 id="restManagerPassword"
                                                 onChange={this.handleChange}
                                                 defaultValue={this.restManagerPassword}

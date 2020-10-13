@@ -120,10 +120,11 @@ class CreateItemForm extends Component {
                                     <GridContainer>
                                         <GridItem xs={12} sm={12} md={6}>
                                             <TextField
+                                                required
                                                 error={this.state.errorName}
                                                 fullWidth="25px"
                                                 name="name"
-                                                label="Name *"
+                                                label="Name"
                                                 id="outlined-start-adornment"
                                                 onChange={this.handleChange}
                                                 value={this.name}
@@ -131,11 +132,11 @@ class CreateItemForm extends Component {
                                         </GridItem>
                                         <GridItem xs={12} sm={12} md={6}>
                                             <TextField
+                                                required
                                                 error={this.state.errorDescription}
-                                                //                                                error={this.state.description === '' ? true : false}
                                                 fullWidth="25px"
                                                 name="description"
-                                                label="Description *"
+                                                label="Description "
                                                 id="description"
                                                 onChange={this.handleChange}
                                                 defaultValue={this.description}
@@ -158,10 +159,11 @@ class CreateItemForm extends Component {
                                         </GridItem>
                                         <GridItem xs={12} sm={12} md={6}>
                                             <TextField
+                                                required
                                                 error={this.state.errorSides}
                                                 fullWidth="25px"
                                                 name="includedSides"
-                                                label="Included Sides *"
+                                                label="Included Sides"
                                                 id="included-sides"
                                                 onChange={this.handleChange}
                                                 defaultValue={this.includedSides}

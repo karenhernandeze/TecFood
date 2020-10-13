@@ -11,6 +11,8 @@ import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import Input from "@material-ui/core/Input";
 import Navbar from "../../building_blocks/Navbars/Navbar";
+import "../Form-styles.css"
+
 const preset = 'muvwlutm';
 
 class EditItemForm extends Component {
@@ -41,7 +43,7 @@ class EditItemForm extends Component {
     refreshItems() {
         console.log("REFRESH ITEMS ")
         console.log(this.state._id)
-        console.log(ManageItemsService.retrieveItemById(this.state._id))
+        console.log(this.state)
         ManageItemsService.retrieveItemById(this.state._id)
             .then(
                 response=> {this.setState({
@@ -50,7 +52,9 @@ class EditItemForm extends Component {
                     description: response.data.description,
                     includedSides: response.data.includedSides,
                     image: response.data.image
-                })}
+                })
+
+                    console.log(this.state)}
             )
     }
 
@@ -83,11 +87,6 @@ class EditItemForm extends Component {
             ...this.state,
             image: event.target.files[0]
         });
-        console.log("ON CHANGE")
-        console.log(event)
-        console.log(event.target)
-        console.log(this.state)
-        console.log(event.target.files[1])
     };
 
     onSubmitImage (){
@@ -113,6 +112,13 @@ class EditItemForm extends Component {
         console.log(this.state)
     };
 
+    onError = (image) => {
+        (image).hideBackdrop()// .hide();
+        // this.setState({
+        //     ...this.state,
+        //     image: null
+        // });
+    };
 
     render() {
         return (
@@ -130,6 +136,7 @@ class EditItemForm extends Component {
                                     <GridContainer>
                                         <GridItem xs={12} sm={12} md={6}>
                                             <TextField
+                                                required
                                                 error={this.state.errorName}
                                                 fullWidth="25px"
                                                 name="name"
@@ -141,6 +148,7 @@ class EditItemForm extends Component {
                                         </GridItem>
                                         <GridItem xs={12} sm={12} md={6}>
                                             <TextField
+                                                required
                                                 error={this.state.errorDescription}
                                                 fullWidth="25px"
                                                 name="description"
@@ -158,7 +166,7 @@ class EditItemForm extends Component {
                                                 error={this.state.errorPrice}
                                                 fullWidth="25px"
                                                 name="price"
-                                                label="Price"
+                                                label="Price *"
                                                 id="price"
                                                 onChange={this.handleChange}
                                                 value={this.state.price}
@@ -167,6 +175,7 @@ class EditItemForm extends Component {
                                         </GridItem>
                                         <GridItem xs={12} sm={12} md={6}>
                                             <TextField
+                                                required
                                                 error={this.state.errorSides}
                                                 fullWidth="25px"
                                                 name="includedSides"
@@ -187,9 +196,13 @@ class EditItemForm extends Component {
                                                         <br/>
                                                         <div>
                                                             {
-                                                                ((this.state.image) == null || (this.state.image) == "" || (this.state.image) !== String) ?
+                                                                //(this.state.image).includes("https://res.cloudinary.com/")
+                                                                ( (this.state.image) == null) ?
                                                                     <p >none</p> :
-                                                                    <img src={this.state.image}/>
+                                                                    // ( (this.state.image).includes("https://res.cloudinary.com/") ) ?
+                                                                    <img src={this.state.image} onError={i => i.target.src=''}/>
+                                                                // :
+                                                                //     <p >none</p>
                                                             }
                                                         </div>
                                                         <span>UPDATE IMAGE</span>

@@ -91,7 +91,7 @@ class TableRestaurant extends Component {
         });
     };
 
-    updateItem(id) {
+    updateRestaurant(id) {
         //console.log('update ' + id)
         this.props.history.push(`/restaurant/${id}`)
         //roseColor
@@ -142,7 +142,7 @@ class TableRestaurant extends Component {
                                                         labelPlacement="top"
                                                     />
                                                 ],
-                                                [<Button color={"warning"} onClick={() => this.updateItem(restaurant._id)}> Edit </Button>]
+                                                [<Button color={"warning"} onClick={() => this.updateRestaurant(restaurant._id)}> Edit </Button>]
                                             ],
                                     )}
                             />
