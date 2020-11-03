@@ -50,6 +50,29 @@ export class ManageDeliveryService {
         }
     }
 
+    async setOrderAsInProgress (id) {
+        console.log("update order to start")
+        console.log(id);
+        try{
+            const data = axios.put(`${manageDeliveryAPI}/start/${id}`);
+            return data;
+        } catch (err) {
+            console.log(err);
+            return err.message
+        }
+    }
+
+    async setOrderAsCancelled (id) {
+        console.log("update order to cancel")
+        try{
+            const data = axios.put(`${manageDeliveryAPI}/cancel/${id}`);
+            return data;
+        } catch (err) {
+            console.log(err);
+            return err.message
+        }
+    }
+
 };
 
 export default new ManageDeliveryService();

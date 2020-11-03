@@ -9,7 +9,15 @@ import CardHeader from "../../building_blocks/Card/CardHeader.js";
 import CardIcon from "../../building_blocks/Card/CardIcon.js";
 import CardFooter from "../../building_blocks/Card/CardFooter.js";
 import "./Dashboard-style.css"
-import {AirportShuttleTwoTone, ArrowDropDown} from "@material-ui/icons";
+import {
+    AirportShuttleTwoTone,
+    ArrowDropDown, Autorenew, History,
+    HourglassEmpty,
+    PanTool, PlayArrow, PlayCircleOutline,
+    PriorityHigh,
+    Report,
+    Send
+} from "@material-ui/icons";
 import ManageDeliveryService from "../../service/ManageDeliveryService";
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -24,6 +32,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Poppers from "@material-ui/core/Popper";
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import Danger from "../../building_blocks/Typography/Danger";
+import {withRouter} from "react-router-dom";
 
 class DashboardPage extends Component {
     constructor(props) {
@@ -34,7 +43,7 @@ class DashboardPage extends Component {
             order: {
                 _id: '',
                 customerName: '',
-                restaurantId:'',
+                restaurantId: this.props.match.params.id,
                 customerId:'',
                 orderDescription:'',
                 orderNumber:'',
@@ -64,6 +73,7 @@ class DashboardPage extends Component {
                 response => {
                     console.log(response);
                     this.setState({ orders: response.data })
+                    console.log(this.state.orders)
                 }
             )
         console.log(this.state.orders)
@@ -136,6 +146,32 @@ class DashboardPage extends Component {
         }));
     }
 
+    //SET ORDER AS MISSED
+    setOrderAsCancelled (id){
+        ManageDeliveryService.setOrderAsCancelled(id).then(
+            response => {
+                this.refreshOrders()
+            }
+        )
+        this.setState({
+            ...this.state,
+            open: false
+        });
+    }
+
+    //SET ORDER AS MISSED
+    setOrderAsInProgress (id){
+        ManageDeliveryService.setOrderAsInProgress(id).then(
+            response => {
+                this.refreshOrders()
+            }
+        )
+        this.setState({
+            ...this.state,
+            open: false
+        });
+    }
+
     //OPEN BUTTON AT RIGHT TOP
     handleClickOrders = event => {
         const { value, openOrders } = event.target;
@@ -145,7 +181,7 @@ class DashboardPage extends Component {
         });
     };
 
-    //CLICK TO SEE ALL ORDERS
+    //FILTER TO SEE ALL ORDERS
     handleClickAllOrders = event => {
         this.setState({
             ...this.state,
@@ -155,8 +191,9 @@ class DashboardPage extends Component {
         });
     };
 
-    //CLICK TO OPEN MISSED ORDERS
+    //FILTER TO OPEN MISSED ORDERS
     handleClickMissedOrders = event => {
+        const { value, openOrders } = event.target;
         this.setState({
             ...this.state,
             orderState: "Missed",
@@ -165,7 +202,7 @@ class DashboardPage extends Component {
         });
     };
 
-    //CLICK TO OPEN ORDERS READY
+    //FILTER TO OPEN ORDERS READY
     handleClickOrdersReady = event => {
         this.setState({
             ...this.state,
@@ -175,7 +212,7 @@ class DashboardPage extends Component {
         });
     };
 
-    //CLICK TO OPEN ORDERS DELIVERED
+    //FILTER TO OPEN ORDERS DELIVERED
     handleClickDeliveredOrders = event => {
         this.setState({
             ...this.state,
@@ -185,8 +222,28 @@ class DashboardPage extends Component {
         });
     };
 
-    //CLICK TO OPEN ORDERS IN PROCESS
-    handleClickOrdersInProcess = event => {
+    //FILTER TO OPEN ORDERS CANCELLED
+    handleClickCancelledOrders = event => {
+        this.setState({
+            ...this.state,
+            orderState: "Cancelled",
+            orderStateName: "Cancelled Orders",
+            openOrders: false
+        });
+    };
+
+    //Filter Orders in Progress
+    handleClickOrdersInProgress = event => {
+        this.setState({
+            ...this.state,
+            orderState: "In Progress",
+            orderStateName: "Orders In Progress",
+            openOrders: false
+        });
+    };
+
+    //Filter Pending Orders
+    handleClickPendingOrders = event => {
         this.setState({
             ...this.state,
             orderState: "Pending",
@@ -197,7 +254,9 @@ class DashboardPage extends Component {
 
     render() {
         const {orders} = this.state
+        const _restaurantID = this.props.match.params.id
         const filteredOrders = orders.filter(order =>
+            order.restaurantId.includes(_restaurantID) &&
             order.orderStatus.includes(this.state.orderState)
         );
 
@@ -230,9 +289,15 @@ class DashboardPage extends Component {
                                     </MenuItem>
                                     <MenuItem
                                         class="da"
-                                        onClick={this.handleClickMissedOrders}
+                                        onClick={this.handleClickPendingOrders}
                                     >
-                                        Missed Orders
+                                        Pending Orders
+                                    </MenuItem>
+                                    <MenuItem
+                                        class="da"
+                                        onClick={this.handleClickOrdersInProgress}
+                                    >
+                                        Orders In Progress
                                     </MenuItem>
                                     <MenuItem
                                         class="da"
@@ -248,9 +313,15 @@ class DashboardPage extends Component {
                                     </MenuItem>
                                     <MenuItem
                                         class="da"
-                                        onClick={this.handleClickOrdersInProcess}
+                                        onClick={this.handleClickMissedOrders}
                                     >
-                                        Orders in Process
+                                        Missed Orders
+                                    </MenuItem>
+                                    <MenuItem
+                                        class="da"
+                                        onClick={this.handleClickCancelledOrders}
+                                    >
+                                        Cancelled Orders
                                     </MenuItem>
                                 </MenuList>
                             </ClickAwayListener>
@@ -260,27 +331,33 @@ class DashboardPage extends Component {
 
                 <GridContainer className="dialog">
                     {
-
                         filteredOrders.map(
                             order =>
                                 <GridItem xs={12} sm={6} md={3} key={order._id}>
                                     <Card className={"dialog"} onClick={() => this.handleClickOpen(order)}>
                                         <CardHeader color={
-                                            order.orderStatus === "Ready" ? "warning" :
-                                                order.orderStatus === "Delivered" ? "success" :
-                                                    order.orderStatus === "Pending" ? "info" : "warning"
+                                            order.orderStatus === "Pending" ? "primary" :
+                                                order.orderStatus === "In Progress" ? "rose" :
+                                                    order.orderStatus === "Ready" ? "success" :
+                                                        order.orderStatus === "Delivered" ? "info" :
+                                                            order.orderStatus === "Missed" ? "warning" :
+                                                                order.orderStatus === "Cancelled" ? "danger" :null
                                         } stats icon>
                                             <CardIcon color={
-                                                order.orderStatus === "Ready" ? "warning" :
-                                                    order.orderStatus === "Delivered" ? "success" :
-                                                        order.orderStatus === "Pending" ? "info" :
-                                                            order.orderStatus === "Missed" ? "danger" : null
+                                                order.orderStatus === "Pending" ? "primary" :
+                                                    order.orderStatus === "In Progress" ? "rose" :
+                                                        order.orderStatus === "Ready" ? "success" :
+                                                            order.orderStatus === "Delivered" ? "info" :
+                                                                order.orderStatus === "Missed" ? "warning" :
+                                                                    order.orderStatus === "Cancelled" ? "danger" :null
                                             }>
                                                 {
-                                                    order.orderStatus === "Ready" ? <AirportShuttleTwoTone /> :
-                                                        order.orderStatus === "Delivered" ? <Done/> :
-                                                            order.orderStatus === "Pending" ? <AccessTime/> :
-                                                                order.orderStatus === "Missed" ? <Block/> : null
+                                                    order.orderStatus === "Pending" ? <AccessTime/> :
+                                                        order.orderStatus === "In Progress" ? <HourglassEmpty/> :
+                                                            order.orderStatus === "Ready" ? <AirportShuttleTwoTone /> :
+                                                                order.orderStatus === "Delivered" ? <Done/> :
+                                                                    order.orderStatus === "Missed" ? <Report/> :
+                                                                        order.orderStatus === "Cancelled" ? <Block/> :null
                                                 }
                                             </CardIcon>
                                             <p className={"cardCategory"}>{order.orderDescription}</p>
@@ -289,9 +366,12 @@ class DashboardPage extends Component {
                                         <CardFooter stats>
                                             <div className={"stats"}>
                                                 {
-                                                    order.orderStatus === "Ready" ? (<AirportShuttleTwoTone />) :
-                                                        order.orderStatus === "Delivered" ? <Done/> :
-                                                            order.orderStatus === "Pending" ? <AccessTime/> : <Block/>
+                                                    order.orderStatus === "Pending" ? <AccessTime/> :
+                                                        order.orderStatus === "In Progress" ? <HourglassEmpty/> :
+                                                            order.orderStatus === "Ready" ? <AirportShuttleTwoTone /> :
+                                                                order.orderStatus === "Delivered" ? <Done/> :
+                                                                    order.orderStatus === "Missed" ? <Report/> :
+                                                                        order.orderStatus === "Cancelled" ? <Block/> :null
                                                 }
                                                 {order.orderStatus}
                                             </div>
@@ -304,6 +384,8 @@ class DashboardPage extends Component {
                         open={this.state.open}
                         onClose={this.handleClose}
                         aria-labelledby={this.state.order._id}
+                        fullWidth={true}
+                        maxWidth={true}
                     >
                         <DialogTitle>
                             {this.state.order.customerName}
@@ -336,22 +418,64 @@ class DashboardPage extends Component {
                         </DialogContent>
                         <DialogActions>
                             {
-                                this.state.order.orderStatus === "Ready" ? (
-                                    <>
-                                        <Button onClick={() => {this.setOrderAsMissed(this.state.order._id)}} color="danger">
-                                            Missed
-                                        </Button>
-                                        <Button onClick={ () => {this.setOrderAsDelivered(this.state.order._id)}} color="success" autoFocus>
-                                            Delivered
-                                        </Button>
-                                    </>) : this.state.order.orderStatus === "Missed" ?
-                                    (<Button onClick={ () => {this.setOrderAsDelivered(this.state.order._id)}} color="success" autoFocus>
-                                        Delivered
-                                    </Button>) : this.state.order.orderStatus === "Delivered" ? (
-                                        <Button onClick={ () => {this.setOrderAsMissed(this.state.order._id)}} color="danger" autoFocus>
-                                            Missed
-                                        </Button>
-                                    ) : null
+                                //IF STATE IS IN PENDING
+                                this.state.order.orderStatus === "Pending" ? (
+                                        <>
+                                            <Button onClick={() => {this.setOrderAsCancelled(this.state.order._id)}} color="danger">
+                                                Cancel
+                                                <Block className={"icon"}/>
+                                            </Button>
+                                            <Button onClick={ () => {this.setOrderAsInProgress(this.state.order._id)}} color="success" autoFocus>
+                                                Ready
+                                                <PlayArrow className={"icon"}/>
+                                            </Button>
+                                        </>)
+                                    //IF STATE IS IN PROGRESS
+                                    : this.state.order.orderStatus === "In Progress" ? (
+                                        <>
+                                            <Button onClick={() => {this.setOrderAsCancelled(this.state.order._id)}} color="danger">
+                                                Cancel
+                                                <Block className={"icon"}/>
+                                            </Button>
+
+                                        </>) :
+                                    //IF STATE IS IN READY
+                                    this.state.order.orderStatus === "Ready" ? (
+                                            <>
+                                                <Button onClick={ () => {this.setOrderAsCancelled(this.state.order._id)}} color="danger" autoFocus>
+                                                    Cancelled
+                                                    <Block className={"icon"}/>
+                                                </Button>
+                                                <Button onClick={ () => {this.setOrderAsMissed(this.state.order._id)}} color="warning" autoFocus>
+                                                    Missed
+                                                    <Report className={"icon"}/>
+                                                </Button>
+                                                <Button onClick={() => {this.setOrderAsDelivered(this.state.order._id)}} color="success">
+                                                    Delivered
+                                                    <Done className={"icon"}/>
+                                                </Button>
+                                            </>) :
+                                        //IF STATE IS DELIVERED
+                                        this.state.order.orderStatus === "Delivered" ? (
+                                                <Button onClick={ () => {this.setOrderAsMissed(this.state.order._id)}} color="danger" autoFocus>
+                                                    Missed
+                                                    <Report className={"icon"}/>
+                                                </Button>
+                                            ) :
+                                            //IF STATE IS MISSED
+                                            this.state.order.orderStatus === "Missed" ? (
+                                                    <>
+                                                        <Button onClick={ () => {this.setOrderAsCancelled(this.state.order._id)}} color="danger" autoFocus>
+                                                            Cancelled
+                                                            <Block className={"icon"}/>
+                                                        </Button>
+                                                        <Button onClick={() => {this.setOrderAsDelivered(this.state.order._id)}} color="success">
+                                                            Delivered
+                                                            <Done className={"icon"}/>
+                                                        </Button>
+                                                    </>
+                                                ) :
+                                                null
                             }
                         </DialogActions>
                     </Dialog>
@@ -361,4 +485,5 @@ class DashboardPage extends Component {
     }
 }
 
-export default DashboardPage
+export default withRouter (DashboardPage)
+//export default DashboardPage
