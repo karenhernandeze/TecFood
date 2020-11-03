@@ -1,0 +1,28 @@
+.restName{
+    display: table;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.restSch{
+    display: table;
+    margin-right: 100px;
+    margin-left: auto;
+    text-align: center;
+}
+
+.restEmp{
+    display: table;
+    margin-left: 20px;
+    text-align: start;
+}
+
+.edit{
+    display: table;
+    margin-right: 30px;
+    margin-left: auto;
+}
+
+.icon{
+    padding-left: 15px;
+}

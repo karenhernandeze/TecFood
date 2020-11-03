@@ -10,6 +10,8 @@ import AdminRestaurants from "./layouts/AdminRestaurants";
 import AdminDeliveryOnLocation from "./layouts/AdminDeliveryOnLocation";
 import CreateRestaurantForm from "./components/CreateRestaurantForm/CreateRestaurantForm";
 import EditRestaurantForm from "./components/EditRestaurantForm/EditRestaurantForm";
+import AdminMain from "./layouts/AdminMain";
+import AdminEditMain from "./layouts/AdminEditMain";
 
 class App extends Component {
     render() {
@@ -24,7 +26,9 @@ class App extends Component {
                     <Route path="/restaurants" exact component={AdminRestaurants} />
                     <Route path="/restaurant" exact component={CreateRestaurantForm} />
                     <Route path="/restaurant/:id" exact component={EditRestaurantForm} />
-                    <Route path="/order/dol" exact component={AdminDeliveryOnLocation} />
+                    <Route path="/orders/dol" exact component={AdminDeliveryOnLocation} />
+                    <Route path="/:id/main" exact component={AdminMain} />
+                    <Route path="/:id/main/e/" exact component={AdminEditMain} />
                 </Switch>
             </Router>
         )

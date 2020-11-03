@@ -47,6 +47,19 @@ const headerStyle = () => ({
             background: "transparent"
         }
     },
+    titleSec: {
+        ...defaultFont,
+        letterSpacing: "unset",
+        lineHeight: "30px",
+        fontSize: "18px",
+        borderRadius: "3px",
+        textTransform: "none",
+        color: "inherit",
+        margin: "0",
+        "&:hover,&:focus": {
+            background: "transparent"
+        }
+    },
     appResponsive: {
         top: "8px"
     },
