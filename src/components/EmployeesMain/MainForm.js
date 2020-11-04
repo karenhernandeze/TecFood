@@ -49,6 +49,12 @@ class MainForm extends Component {
     }
 
     render() {
+        const {employees} = this.state
+        //REMOVE EMPLOYEES DISABLED, BUT APPEAR IN EDIT
+        console.log(employees)
+        const filteredEmployees = employees.filter( employee =>
+            employee.availability === true
+        )
         return(
             <div>
                 <div className={"restName"}>
@@ -72,17 +78,20 @@ class MainForm extends Component {
                 <div className={"restEmp"}>
                     <h4>
                         EMPLOYEES
-                        <GridContainer xs>
+                        <GridContainer item xs class={"tabW"}>
                             {
-                                this.state.employees.map(
+                                filteredEmployees.map(
                                     employee =>
-                                        <GridItem xs={"8"}>
+                                        <GridItem xs={"8"} >
                                             <Card>
                                                 <CardBody>
                                                     <Table
                                                         tableData={
                                                             [
-                                                                [employee.firstName, employee.lastName, employee.position]
+                                                                [<label class={"tableFName"}> {employee.firstName}</label>
+                                                                    ,<label class={"tableLName"}> {employee.lastName}</label>,
+                                                                    <label class={"tablePos"}> {employee.position}</label>
+                                                                ]
                                                             ]
                                                         }
                                                     />

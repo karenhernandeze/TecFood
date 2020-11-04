@@ -18,9 +18,7 @@ export default function AdminMain() {
             <div>
                 <NavbarMain/>
             </div>
-            <div className={classes.content}>
-                <EditMainForm/>
-            </div>
+            <EditMainForm/>
         </div>
     );
 }

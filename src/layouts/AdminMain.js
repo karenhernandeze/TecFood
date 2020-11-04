@@ -19,15 +19,7 @@ export default function AdminMain() {
             <div>
                 <NavbarMain/>
             </div>
-            <div className={classes.content}>
-                <MainForm/>
-            </div>
+            <MainForm/>
         </div>
     );
 }
-
-// import React, {Component} from 'react'
-//
-// class AdminMain extends Component {
-//
-// }

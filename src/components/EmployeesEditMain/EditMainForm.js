@@ -97,7 +97,7 @@ class EditMainForm extends Component {
                     })
                     console.log(this.state.employeeEdit)
                 }
-        )
+            )
     };
 
     //SET STATE OF DIALOG TO FALSE AND CLOSE IT
@@ -159,13 +159,13 @@ class EditMainForm extends Component {
                     this.refreshMain();
                 }
             )
-            // ManageRestaurantService.createNewRestaurant(this.state)
-            //     .then(
-            //         response => {
-            //             console.log(this.state)
-            //             this.props.history.push(`/restaurants`)
-            //         }
-            //     )
+        // ManageRestaurantService.createNewRestaurant(this.state)
+        //     .then(
+        //         response => {
+        //             console.log(this.state)
+        //             this.props.history.push(`/restaurants`)
+        //         }
+        //     )
         // }
     }
 
@@ -177,8 +177,8 @@ class EditMainForm extends Component {
                     firstName:this.state.employee.firstName,
                     lastName:this.state.employee.lastName,
                     position:this.state.employee.position,
-                availability: false
-            }})
+                    availability: false
+                }})
         } else if (this.state.employee.availability == false){
             this.setState({ employee: {
                     restaurantId: this.props.match.params.id,
@@ -264,18 +264,20 @@ class EditMainForm extends Component {
                 <div className={"restEmp"}>
                     <h4>
                         EMPLOYEES
-                        <GridContainer xs>
+                        <GridContainer item xs class={"tabW"}>
                             {
                                 this.state.employees.map(
                                     employee =>
-                                        <GridItem xs={"8"} >
+                                        <GridItem  xs={"8"} >
                                             <Card>
                                                 <CardBody>
                                                     <Table
                                                         tableData={
                                                             [
-                                                                [employee.firstName, employee.lastName, employee.position,
-                                                                    employee.availability == true ? "Enable" : "Disable",
+                                                                [<label class={"tableFName"}> {employee.firstName}</label>
+                                                                    ,<label class={"tableLName"}> {employee.lastName}</label>,
+                                                                    <label class={"tablePos"}> {employee.position}</label>,
+                                                                    <label class={"table4"}> {employee.availability == true ? "Enable" : "Disable"}</label>,
                                                                     <Button onClick={() => this.handleOpenEdit(employee._id)}
                                                                             className={"button"} color={"warning"} >
                                                                         Edit
@@ -292,7 +294,7 @@ class EditMainForm extends Component {
                         </GridContainer>
                     </h4>
                 </div>
-                <div>
+                <div class={"pad"}>
                     <Button onClick={this.handleOpen} color={"warning"}>
                         ADD EMPLOYEE
                         <Add className={"icon"}/>

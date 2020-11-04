@@ -20,13 +20,14 @@ class App extends Component {
                 <Switch>
                     <Route path="/orders" exact component={Admin} />
                     <Route path="/orders/:id" exact component={Admin} />
-                    <Route path="/items" exact component={AdminItems} />
+                    <Route path="/items/:id" exact component={AdminItems} />
+                    {/*<Route path="/items/" exact component={AdminItems} />*/}
                     <Route path="/item" exact component={CreateItemForm}/>
                     <Route path="/item/:id" exact component={EditItemForm}/>
                     <Route path="/restaurants" exact component={AdminRestaurants} />
                     <Route path="/restaurant" exact component={CreateRestaurantForm} />
                     <Route path="/restaurant/:id" exact component={EditRestaurantForm} />
-                    <Route path="/orders/dol" exact component={AdminDeliveryOnLocation} />
+                    <Route path="/order/dol" exact component={AdminDeliveryOnLocation} />
                     <Route path="/:id/main" exact component={AdminMain} />
                     <Route path="/:id/main/e/" exact component={AdminEditMain} />
                 </Switch>
