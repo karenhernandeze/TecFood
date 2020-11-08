@@ -40,10 +40,8 @@ class EditItemForm extends Component {
         this.refreshItems();
     }
 
+    //METHOD USED TO GET INFORMATION FROM DATA BASE, RETRIEVE ALL THE INFORMATION FOR THE ITEMS
     refreshItems() {
-        console.log("REFRESH ITEMS ")
-        console.log(this.state._id)
-        console.log(this.state)
         ManageItemsService.retrieveItemById(this.state._id)
             .then(
                 response=> {this.setState({
@@ -52,25 +50,26 @@ class EditItemForm extends Component {
                     description: response.data.description,
                     includedSides: response.data.includedSides,
                     image: response.data.image
-                })
-
-                    console.log(this.state)}
+                })}
             )
     }
 
+    //WHEN IN SUBMIT, CHECK IF ALL THE FIELDS ARE FIELD, IF NOT THROW AN ERROR
     onSubmit = async() => {
+        //FIELDS NOT FILLED
         if (this.state.name == "" || this.state.description == '' || this.state.price == '' || this.state.includedSides == ''){
             this.state.name == '' ? this.setState({errorName: true}) : this.setState({errorName: false})
             this.state.description == '' ? this.setState({errorDescription: true}) : this.setState({errorName: false})
             this.state.price == '' ? this.setState({errorPrice: true}) : this.setState({errorName: false})
             this.state.includedSides == '' ? this.setState({errorSides: true}) : this.setState({errorName: false})
-        }else{
+        }else{ //FIELDS FILLED
+            //SUBMIT IMAGE
             const linkPhoto = await this.onSubmitImage()
-            console.log(linkPhoto)
             this.setState({
                 ...this.state,
                 image: linkPhoto
             });
+            //UPDATE ITEM WITH THE STATE OF THE IMAGE UPDATED
             ManageItemsService.updateItem(this.state._id, this.state)
                 .then(
                     response => {
@@ -81,7 +80,7 @@ class EditItemForm extends Component {
         }
     }
 
-    //UPLOAD IMAGE CHANGE
+    //UPLOAD IMAGE AND HANDLE STATE CHANGE
     onChange = event => {
         this.setState({
             ...this.state,
@@ -89,35 +88,30 @@ class EditItemForm extends Component {
         });
     };
 
+    //SUBMIT IMAGE TO THE SERVICE
     onSubmitImage (){
         const formData = new FormData();
         formData.append('file', this.state.image);
         formData.append('upload_preset', preset);
         const link = ManageItemsService.updloadImage(formData).then(
             response => {
-                console.log(response)
                 return response
             }
         )
         return link;
     };
 
+    //HANDLE CHANGE IN TEXT FIELDS
     handleChange = event => {
         const { value, name } = event.target;
         this.setState({
             ...this.state,
             [name]: value
         });
-        console.log("HAndle change")
-        console.log(this.state)
     };
 
     onError = (image) => {
-        (image).hideBackdrop()// .hide();
-        // this.setState({
-        //     ...this.state,
-        //     image: null
-        // });
+        (image).hideBackdrop()
     };
 
     render() {
@@ -196,13 +190,9 @@ class EditItemForm extends Component {
                                                         <br/>
                                                         <div>
                                                             {
-                                                                //(this.state.image).includes("https://res.cloudinary.com/")
                                                                 ( (this.state.image) == null) ?
                                                                     <p >none</p> :
-                                                                    // ( (this.state.image).includes("https://res.cloudinary.com/") ) ?
                                                                     <img src={this.state.image} onError={i => i.target.src=''}/>
-                                                                // :
-                                                                //     <p >none</p>
                                                             }
                                                         </div>
                                                         <span>UPDATE IMAGE</span>

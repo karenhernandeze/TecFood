@@ -12,8 +12,6 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import Input from "@material-ui/core/Input";
 import '../Form-styles.css'
 import Navbar from "../../building_blocks/Navbars/Navbar";
-import ClearIcon from '@material-ui/icons/Clear';
-import CircularProgress from "@material-ui/core/CircularProgress";
 const preset = 'muvwlutm';
 
 class CreateItemForm extends Component {
@@ -32,37 +30,35 @@ class CreateItemForm extends Component {
             errorPrice: false,
             errorSides: false
         }
-        this.addItemsClicked = this.addItemsClicked.bind(this)
+        this.addNewItem = this.addNewItem.bind(this)
     }
 
-    addItemsClicked = async () => {
+    //ADD NEW ITEM AND CHECK CONSTRAINTS
+    addNewItem = async () => {
+        //IF ALL THE FIELDS ARE COMPLETE CALL THE SERVICE, ELSE CHECK WHICH FIELD IS NOT FILLED AND MARK AN ERROR
         if (this.state.name == "" || this.state.description == '' || this.state.price == '' || this.state.includedSides == ''){
             this.state.name == '' ? this.setState({errorName: true}) : this.setState({errorName: false})
             this.state.description == '' ? this.setState({errorDescription: true}) : this.setState({errorName: false})
             this.state.price == '' ? this.setState({errorPrice: true}) : this.setState({errorName: false})
             this.state.includedSides == '' ? this.setState({errorSides: true}) : this.setState({errorName: false})
         }else{
+            //UPLOAD THE PICTURE AND AWAIT FOR ITS SUBMIT TO THE SERVICE
             const linkPhoto = await this.onSubmit()
-            console.log(linkPhoto)
             this.setState({
                 ...this.state,
                 image: linkPhoto
             });
+            //SEND ITEM OBJECT TO THE SERVICE, INCLUIDING THE IMAGE.
             ManageItemsService.createNewItem(this.state)
                 .then(
                     response => {
                         this.props.history.push(`/items`)
-                        //this.setState({ item: response.data })
                     }
                 )
         }
     };
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        console.log("UPDATE")
-        console.log(this.state)
-    }
-
+    //HANDLE CHANGE IN TEXT FIELDS
     handleChange = event => {
         const { value, name } = event.target;
         this.setState({
@@ -71,7 +67,7 @@ class CreateItemForm extends Component {
         });
     };
 
-    //UPLOAD IMAGE CHANGE
+    //UPLOAD IMAGE HANDLE CHANGE
     onChange = event => {
         this.setState({
             ...this.state,
@@ -79,10 +75,7 @@ class CreateItemForm extends Component {
         });
     };
 
-    // removePhoto = event => {
-    //     this.setState({ image: '' });
-    // };
-
+    //SUBMIT IMAGE TO THE SERVICE AND IF NOTHING IS SUBMITTED RETURN AND EMPTY STRING
     onSubmit (){
         const formData = new FormData();
         formData.append('file', this.state.image);
@@ -96,8 +89,6 @@ class CreateItemForm extends Component {
                 } else {
                     return response
                 }
-
-
             }
         )
         return link;
@@ -180,18 +171,6 @@ class CreateItemForm extends Component {
                                                         <br/>
                                                         <input type='file' name='image' onChange={this.onChange} accept=".png"/>
                                                         <br/>
-                                                        {/*<ClearIcon onClick={this.removePhoto}/>*/}
-                                                        {/*{*/}
-                                                        {/*    this.state.image === '' ?*/}
-                                                        {/*        <>*/}
-                                                        {/*        <span>No File Selected</span>*/}
-                                                        {/*        </>*/}
-                                                        {/*         :*/}
-                                                        {/*        <>*/}
-                                                        {/*            <span>{(this.state.image.name)}</span>*/}
-                                                        {/*            <ClearIcon onClick={this.removePhoto}/>*/}
-                                                        {/*        </>*/}
-                                                        {/*}*/}
                                                     </div>
                                                 </div>
 
@@ -200,7 +179,7 @@ class CreateItemForm extends Component {
                                     </GridContainer>
                                 </CardBody>
                                 <CardFooter>
-                                    <Button color="success" onClick={this.addItemsClicked}>Add Item</Button>
+                                    <Button color="success" onClick={this.addNewItem}>Add Item</Button>
                                 </CardFooter>
                             </Card>
                         </GridItem>

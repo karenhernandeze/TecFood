@@ -41,6 +41,7 @@ class TableItems extends Component {
         this.refreshItems();
     }
 
+    //RETRIEVE ALL ITEMS FROM THE SERVICE
     refreshItems() {
         ManageItemsService.retrieveAllItems()
             .then(
@@ -58,18 +59,20 @@ class TableItems extends Component {
             )
     }
 
+    //REDIRECT TO THE CREATE ITEM FORM
     addNewItem() {
-        console.log("THIS.PROPS")
-        console.log(this.props)
         this.props.history.push(`/item`)
     }
 
+    //HANDLE CHANGE FOR THE CHECKBOXES FOR 'AVAILABILITY' STATUS.
     handleChange (item) {
         if (item.availability == true){
             ManageItemsService.disableAvailability(item._id).then(
                 response => {
+                    //SHOW NOTIFICATION ABOUT AVAILABILITY UPDATE
                     this.setState({ tc: true, message: `Item:  ${item.name} , was successfully disabled` })
                     window.setTimeout(this.handleClose, 5000);
+                    //REFRESH CHECKBOX CHECKED
                     this.refreshItems()
 
                 }
@@ -77,22 +80,25 @@ class TableItems extends Component {
         } else if (item.availability == false){
             ManageItemsService.enableAvailability(item._id).then(
                 response => {
+                    //SHOW NOTIFICATION ABOUT AVAILABILITY UPDATE
                     this.setState({tc: true, message: `Item:  ${item.name} , was successfully enabled` })
                     window.setTimeout(this.handleClose, 5000);
+                    //REFRESH CHECKBOX CHECKED
                     this.refreshItems()
                 }
             )
         }
     }
 
+    //IF CLICKED IN THE CROSS, THE NOTIFICATION WILL CLOSE
     handleClose = event => {
         this.setState({
             tc: false
         });
     };
 
+    //REDIRECT TO THE EDIT FORM
     updateItem(id) {
-        //console.log('update ' + id)
         this.props.history.push(`/item/${id}`)
     }
 
@@ -101,13 +107,13 @@ class TableItems extends Component {
             <GridContainer>
                 <GridContainer>
                     <GridItem xs={12} sm={12} md={12}>
+                        {/*SNACKBAR FOR THE NOTIFICATOIN*/}
                         <Snackbar
                             place="tc"
                             color="info"
                             icon={AddAlert}
                             message={this.state.message}
                             open={this.state.tc}
-                            // closeNotification={this.handleClose}
                             close
                         />
                     </GridItem>
@@ -121,6 +127,7 @@ class TableItems extends Component {
                             </p>
                         </CardHeader>
                         <CardBody>
+                            {/* TABLES WITH ALL THE FIELDS OF THE ITEMS */}
                             <Table
                                 tableHeaderColor="success"
                                 tableHead={["Name", "Description", "Price", "Image", "Availability", "Sides", "Edit"]}
@@ -136,9 +143,11 @@ class TableItems extends Component {
 
                                                 ],
                                                 [
+                                                    //CHECKBOX FOR AVAILABILITY AND HANDLE CHANGE WHEN CLICKED AND UNCLICKED
                                                     <FormControlLabel
                                                         onClick={this.showNotification}
-                                                        control={<Checkbox color={"default"} checked={item.availability}  onChange={ () => {this.handleChange(item)}}/>}
+                                                        control={<Checkbox color={"default"} checked={item.availability}
+                                                              onChange={ () => {this.handleChange(item)}}/>}
                                                         labelPlacement="top"
                                                     />
                                                 ],
