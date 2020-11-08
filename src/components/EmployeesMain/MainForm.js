@@ -33,7 +33,8 @@ class MainForm extends Component {
         this.refreshMain();
     }
 
-    //METHOD USED TO GET INFORMATION FROM DATA BASE
+    //METHOD USED TO GET INFORMATION FROM DATA BASE, RETRIEVE ALL THE INFORMATION FOR THE MAIN:
+    //  RESTAURANT NAME AND THE RESTAURANT EMPLOYEES
     refreshMain(){
         ManageMainService.retrieveMainById(this.state._id)
             .then(
@@ -50,7 +51,7 @@ class MainForm extends Component {
 
     render() {
         const {employees} = this.state
-        //REMOVE EMPLOYEES DISABLED, BUT APPEAR IN EDIT
+        //REMOVE EMPLOYEES DISABLED FROM MAIN FORM, BUT APPEAR IN THE EDIT FORM
         console.log(employees)
         const filteredEmployees = employees.filter( employee =>
             employee.availability === true

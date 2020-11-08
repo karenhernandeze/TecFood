@@ -1,28 +1,20 @@
 import React, { Component } from 'react'
 import GridContainer from "../../building_blocks/Grid/GridContainer";
 import GridItem from "../../building_blocks/Grid/GridItem";
-import SnackbarContent from "../../building_blocks/Snackbar/SnackbarContent";
 import Card from "../../building_blocks/Card/Card";
 import CardBody from "../../building_blocks/Card/CardBody";
 import Table from "../../building_blocks/Table/Table";
-import CardHeader from "../../building_blocks/Card/CardHeader";
 import Button from "../../building_blocks/CustomButtons/Button";
-import {Add, AddBox, AddBoxOutlined, Done, Edit, Update} from "@material-ui/icons";
+import {Add, Done, Edit, Update} from "@material-ui/icons";
 import {withRouter} from "react-router-dom";
 import ManageMainService from "../../service/ManageMainService";
 import './EditForm-style.css'
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
-import Danger from "../../building_blocks/Typography/Danger";
-import ErrorIcon from "@material-ui/icons/Error";
-import DialogActions from "@material-ui/core/DialogActions";
 import Dialog from "@material-ui/core/Dialog";
-import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import TextField from "@material-ui/core/TextField";
-import ManageRestaurantService from "../../service/ManageRestaurantService";
 import Checkbox from "@material-ui/core/Checkbox";
-import {emphasize} from "@material-ui/core";
 
 class EditMainForm extends Component {
     constructor(props) {
@@ -30,7 +22,9 @@ class EditMainForm extends Component {
         this.state = {
             _id: this.props.match.params.id,
             restName: '',
+            //ARRAY OF OBJECTS TYPE EMPLOYEE
             employees: [],
+            //THIS EMPLOYEE OBJECT IS USED FOR THE ADD FUNCTION
             employee: {
                 _id: '',
                 restaurantId: this.props.match.params.id,
@@ -39,6 +33,7 @@ class EditMainForm extends Component {
                 position:'',
                 availability: false
             },
+            //THIS EMPLOYEE OBJECT IS USED FOR THE EDIT FUNCTION
             employeeEdit: {
                 restaurantId: this.props.match.params.id,
                 firstName:'',
@@ -48,7 +43,10 @@ class EditMainForm extends Component {
             },
             open: false,
             openEdit: false,
-            employeeEditId: ''
+            employeeEditId: '',
+            errorFName: false,
+            errorLName: false,
+            errorPos: false
         }
         this.addEmployee = this.addEmployee.bind(this);
     }
@@ -58,7 +56,8 @@ class EditMainForm extends Component {
         this.refreshMain();
     }
 
-    //METHOD USED TO GET INFORMATION FROM DATA BASE
+    //METHOD USED TO GET INFORMATION FROM DATA BASE, RETRIEVE ALL THE INFORMATION FOR THE MAIN:
+    //  RESTAURANT NAME AND THE RESTAURANT EMPLOYEES
     refreshMain(){
         ManageMainService.retrieveMainById(this.state._id)
             .then(
@@ -68,7 +67,7 @@ class EditMainForm extends Component {
             )
     }
 
-    //SET STATE OF DIALOG TO TRUE AND OPEN IT
+    //SET STATE OF 'OPEN' TO TRUE TO OPEN DIALOG
     handleOpen = event => {
         this.setState({
             ...this.state,
@@ -76,14 +75,13 @@ class EditMainForm extends Component {
         });
     };
 
-    //SET STATE OF DIALOG EDIT TO TRUE AND OPEN IT
+    //SET STATE OF 'OPEN EDIT ' TO TRUE TO OPEN DIALOG, BUT THE EDIT DIALOG TO EDIT THE EMPLOYEE
     handleOpenEdit(id){
-        console.log(this.state)
-        console.log(id);
+        //RETRIEVE EMPLOYEE BY ID FROM THE SERVICE
         ManageMainService.retrieveEmployeeById(this.state._id, id)
             .then(
                 response => {
-                    console.log(response)
+                    //SET STATE TO THE CURRENT EMPLOYEE DATA
                     this.setState({
                         employeeEdit: {
                             restaurantId: this.props.match.params.id,
@@ -95,7 +93,6 @@ class EditMainForm extends Component {
                         employeeEditId: id,
                         openEdit: true
                     })
-                    console.log(this.state.employeeEdit)
                 }
             )
     };
@@ -105,7 +102,11 @@ class EditMainForm extends Component {
         this.setState({
             ...this.state,
             open: false,
-            openEdit:false
+            openEdit:false,
+            //SET ERROR TO FALSE, FOR THE RED LINE TO DISAPPEAR WHEN OPENING THE DIALOG AGAIN
+            errorFName: false,
+            errorLName: false,
+            errorPos: false
         });
     };
 
@@ -118,8 +119,6 @@ class EditMainForm extends Component {
             ...this.state,
             employee
         });
-        console.log("STATE UPDATED")
-        console.log(this.state)
     };
 
     //HANDLE CHANGE IN EMPLOYEE EDIT TEXT FIELDS
@@ -131,45 +130,31 @@ class EditMainForm extends Component {
             ...this.state,
             employeeEdit
         });
-        console.log("STATE UPDATED")
-        console.log(this.state)
     };
 
     //ADD A NEW EMPLOYEE AND CHECK CONSTRAINTS
-    addEmployee(){
-        // if (this.state.name == "" || this.state.rfc == '' || this.state.location == '' || this.state.restManagerName == '' || this.state.restManagerEmail == "" || this.state.restManagerPassword == '' || this.state.restManagerPhone == ''){
-        //     this.state.name == '' ? this.setState({errorName: true}) : this.setState({errorName: false})
-        //     this.state.rfc == '' ? this.setState({errorRFC: true}) : this.setState({errorRFC: false})
-        //     this.state.location == '' ? this.setState({errorLocation: true}) : this.setState({errorLocation: false})
-        //     this.state.restManagerName == '' ? this.setState({errorRestManagerName: true}) : this.setState({errorRestManagerName: false})
-        //     this.state.restManagerEmail == '' ? this.setState({errorRestManagerEmail: true}) : this.setState({errorRestManagerEmail: false})
-        //     this.state.restManagerPassword == '' ? this.setState({errorRestManagerPassword: true}) : this.setState({errorRestManagerPassword: false})
-        //     this.state.restManagerPhone == '' ? this.setState({errorRestManagerPhone: true}) : this.setState({errorRestManagerPhone: false})
-        // }else{
-        console.log("VALUES")
-        console.log(this.state.employee)
-        console.log(this.state._id)
-        ManageMainService.createNewEmployee(this.state.employee, this.state._id)
-            .then(
-                response => {
-                    this.setState({
-                        ...this.state,
-                        open: false
-                    });
-                    this.refreshMain();
-                }
-            )
-        // ManageRestaurantService.createNewRestaurant(this.state)
-        //     .then(
-        //         response => {
-        //             console.log(this.state)
-        //             this.props.history.push(`/restaurants`)
-        //         }
-        //     )
-        // }
+    addEmployee = async () => {
+        //IN THE IF CHECK IF ALL THE INFORMATION IS FILLED, IF NOT AN ERROR APPEARS.
+        if (this.state.employee.firstName === '' || this.state.employee.lastName === '' || this.state.employee.position === ''){
+            this.state.employee.firstName == '' ? this.setState({errorFName: true}) : this.setState({errorFName: false})
+            this.state.employee.lastName == '' ? this.setState({errorLName: true}) : this.setState({errorLName: false})
+            this.state.employee.position == '' ? this.setState({errorPos: true}) : this.setState({errorPos: false})
+        } else {
+            //ADD THE NEW EMPLOYEE AND CALL THE SERVICE
+            ManageMainService.createNewEmployee(this.state.employee, this.state._id)
+                .then(
+                    response => {
+                        this.setState({
+                            ...this.state,
+                            open: false
+                        });
+                        this.refreshMain();
+                    }
+                )
+        }
     }
 
-    //HANDLE CHECKBOX FOR AVAILABILITY IN CREATE NEW EMPLOYEE
+    //HANDLE CHECKBOX FOR AVAILABILITY IN CREATE NEW EMPLOYEE, WHEN CHECKED AND UNCHECKED
     handleAvailabilityChange () {
         if (this.state.employee.availability == true){
             this.setState({ employee: {
@@ -189,7 +174,7 @@ class EditMainForm extends Component {
         }
     }
 
-    //HANDLE CHECKBOX FOR AVAILABILITY IN EDIT EMPLOYEE
+    //HANDLE CHECKBOX FOR AVAILABILITY IN EDIT EMPLOYEE, WHEN CHECKED AND UNCHECKED
     handleAvailabilityChangeEdit () {
         if (this.state.employeeEdit.availability == true){
             this.setState({ employeeEdit: {
@@ -209,35 +194,39 @@ class EditMainForm extends Component {
         }
     }
 
+    //REDIRECT TO MAIN
     updateMain(id){
         this.props.history.push(`/${id}/main/`)
     }
 
+    //UPDATE EMPLOYEE AND CHECK THAT ALL THE FIELDS ARE FILLED
     updateEmployee(employee){
-        console.log(employee)
-        this.setState({
-            employeeEdit: {
-                restaurantId: this.props.match.params.id,
-                firstName: employee.firstName,
-                lastName: employee.lastName,
-                position: employee.position,
-                availability: employee.availability
-            }
-        })
-        console.log(this.state.employeeEdit)
-        console.log(employee)
-        console.log(this.state._id)
-        console.log(this.state.employeeEdit)
-        ManageMainService.updateEmployee(this.state._id, this.state.employeeEditId, employee)
-            .then(
-                response => {
-                    this.setState({
-                        ...this.state,
-                        openEdit: false
-                    });
-                    this.refreshMain();
+        //IF THERE ARE NOT FILLED AN ERROR WILL APPEAR.
+        if (this.state.employeeEdit.firstName === '' || this.state.employeeEdit.lastName === '' || this.state.employeeEdit.position === ''){
+            this.state.employeeEdit.firstName == '' ? this.setState({errorFName: true}) : this.setState({errorFName: false})
+            this.state.employeeEdit.lastName == '' ? this.setState({errorLName: true}) : this.setState({errorLName: false})
+            this.state.employeeEdit.position == '' ? this.setState({errorPos: true}) : this.setState({errorPos: false})
+        } else{
+            this.setState({
+                employeeEdit: {
+                    restaurantId: this.props.match.params.id,
+                    firstName: employee.firstName,
+                    lastName: employee.lastName,
+                    position: employee.position,
+                    availability: employee.availability
                 }
-            )
+            })
+            ManageMainService.updateEmployee(this.state._id, this.state.employeeEditId, employee)
+                .then(
+                    response => {
+                        this.setState({
+                            ...this.state,
+                            openEdit: false
+                        });
+                        this.refreshMain();
+                    }
+                )
+        }
     }
 
     render() {
@@ -312,31 +301,29 @@ class EditMainForm extends Component {
                         <DialogContentText >
                             <TextField
                                 required
-                                //error={this.state.errorRestManagerEmail}
+                                error={this.state.errorFName}
                                 fullWidth="50px"
                                 name="firstName"
                                 label="First Name"
                                 id="firstName"
                                 onChange={this.handleChange}
-                                //defaultValue={this.restManagerEmail}
                             />
                             <br/>
                             <br/>
                             <TextField
                                 required
-                                error={this.state.errorRestManagerEmail}
+                                error={this.state.errorLName}
                                 fullWidth="50px"
                                 name="lastName"
                                 label="Last Name"
                                 id="lastName"
                                 onChange={this.handleChange}
-                                //defaultValue={this.restManagerEmail}
                             />
                             <br/>
                             <br/>
                             <TextField
                                 required
-                                error={this.state.errorRestManagerEmail}
+                                error={this.state.errorPos}
                                 fullWidth="50px"
                                 name="position"
                                 label="Position"
@@ -372,40 +359,37 @@ class EditMainForm extends Component {
                         <DialogContentText >
                             <TextField
                                 required
-                                //error={this.state.errorRestManagerEmail}
+                                error={this.state.errorFName}
                                 fullWidth="50px"
                                 name="firstName"
                                 label="First Name"
                                 id="firstName"
                                 onChange={this.handleChangeEdit}
                                 value={this.state.employeeEdit.firstName + ""}
-                                //defaultValue={this.restManagerEmail}
                             />
                             <br/>
                             <br/>
                             <TextField
                                 required
-                                error={this.state.errorRestManagerEmail}
+                                error={this.state.errorLName}
                                 fullWidth="50px"
                                 name="lastName"
                                 label="Last Name"
                                 id="lastName"
                                 onChange={this.handleChangeEdit}
                                 value={this.state.employeeEdit.lastName + ""}
-                                //defaultValue={this.restManagerEmail}
                             />
                             <br/>
                             <br/>
                             <TextField
                                 required
-                                error={this.state.errorRestManagerEmail}
+                                error={this.state.errorPos}
                                 fullWidth="50px"
                                 name="position"
                                 label="Position"
                                 id="position"
                                 onChange={this.handleChangeEdit}
                                 value={this.state.employeeEdit.position + ""}
-                                //defaultValue={this.restManagerEmail}
                             />
                             <br/>
                             <br/>
