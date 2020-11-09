@@ -107,7 +107,7 @@ class TableItems extends Component {
             <GridContainer>
                 <GridContainer>
                     <GridItem xs={12} sm={12} md={12}>
-                        {/*SNACKBAR FOR THE NOTIFICATOIN*/}
+                        {/*SNACKBAR FOR THE NOTIFICATION*/}
                         <Snackbar
                             place="tc"
                             color="info"

@@ -6,13 +6,11 @@ import Card from "../../building_blocks/Card/Card.js";
 import CardHeader from "../../building_blocks/Card/CardHeader.js";
 import CardBody from "../../building_blocks/Card/CardBody.js";
 import CardFooter from "../../building_blocks/Card/CardFooter.js";
-import ManageItemsService from "../../service/ManageItemsService";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import Input from "@material-ui/core/Input";
 import ManageRestaurantService from "../../service/ManageRestaurantService";
 import Navbar from "../../building_blocks/Navbars/Navbar";
-import DashboardPage from "../Dashboard_DeliveryRestaurant/Dashboard_DeliveryRestaurant";
 import "../Form-styles.css"
 import {Visibility, VisibilityOff} from "@material-ui/icons";
 import IconButton from "@material-ui/core/IconButton";
@@ -45,7 +43,9 @@ class CreateRestaurantForm extends Component {
         console.log(this.state)
     }
 
+    //ADD NEW RESTAURANT AND CHECK CONSTRAINTS
     addRestaurantsClicked() {
+        //IF ALL THE FIELDS ARE COMPLETE CALL THE SERVICE, ELSE CHECK WHICH FIELD IS NOT FILLED AND MARK AN ERROR
         if (this.state.name == "" || this.state.rfc == '' || this.state.location == '' || this.state.restManagerName == '' || this.state.restManagerEmail == "" || this.state.restManagerPassword == '' || this.state.restManagerPhone == ''){
             this.state.name == '' ? this.setState({errorName: true}) : this.setState({errorName: false})
             this.state.rfc == '' ? this.setState({errorRFC: true}) : this.setState({errorRFC: false})
@@ -58,13 +58,14 @@ class CreateRestaurantForm extends Component {
             ManageRestaurantService.createNewRestaurant(this.state)
                 .then(
                     response => {
-                        console.log(this.state)
+                        //REDIRECT TO THE 'MAIN'. TABLE WITH ALL THE RESTAURANTS.
                         this.props.history.push(`/restaurants`)
                     }
                 )
         }
     }
 
+    //HANDLE CHANGE IN TEXT FIELDS
     handleChange = event => {
         const { value, name } = event.target;
         this.setState({
@@ -73,6 +74,7 @@ class CreateRestaurantForm extends Component {
         });
     };
 
+    //HANDLE CHANGE WHEN ICON IS CLICKED AND PASSWORD SHOULD SHOW OR NOT.
     handleClickShowPassword = event => {
         this.state.showPassword == true ?
             this.setState({
@@ -85,6 +87,7 @@ class CreateRestaurantForm extends Component {
             })
     };
 
+    //HANDLE SHOW PASSWORD ICON
     handleMouseDownPassword = event => {
         event.preventDefault();
     };

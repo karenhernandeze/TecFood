@@ -6,13 +6,11 @@ import Card from "../../building_blocks/Card/Card.js";
 import CardHeader from "../../building_blocks/Card/CardHeader.js";
 import CardBody from "../../building_blocks/Card/CardBody.js";
 import CardFooter from "../../building_blocks/Card/CardFooter.js";
-import ManageItemsService from "../../service/ManageItemsService";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import Input from "@material-ui/core/Input";
 import ManageRestaurantService from "../../service/ManageRestaurantService";
 import Navbar from "../../building_blocks/Navbars/Navbar";
-import TableRestaurant from "../TableRestaurants/TableRestaurant";
 import "../Form-styles.css"
 import IconButton from "@material-ui/core/IconButton";
 import {Visibility, VisibilityOff} from "@material-ui/icons";
@@ -46,10 +44,9 @@ class EditRestaurantForm extends Component {
         this.refreshRestaurants();
     }
 
+    //METHOD USED TO GET INFORMATION FROM DATA BASE, RETRIEVE ALL THE INFORMATION FOR THE RESTAURANTS
     refreshRestaurants() {
-        console.log("REFRESH ")
-        console.log(this.state._id)
-        console.log(ManageRestaurantService.retrieveRestaurantById(this.state._id))
+        //CALL THE SERVICE
         ManageRestaurantService.retrieveRestaurantById(this.state._id)
             .then(
                 response=> {this.setState({
@@ -61,16 +58,13 @@ class EditRestaurantForm extends Component {
                     restManagerPassword: response.data.restManagerPassword,
                     restManagerPhone: response.data.restManagerPhone,
 
-                })
-                    console.log("STATE")
-                    console.log(this.state)
-                }
-
+                })}
             )
-
     }
 
+    //WHEN IN SUBMIT, CHECK IF ALL THE FIELDS ARE FIELD, IF NOT THROW AN ERROR
     onSubmit() {
+        //FIELDS NOT FILLED
         if (this.state.name == "" || this.state.rfc == '' || this.state.location == '' || this.state.restManagerName == '' || this.state.restManagerEmail == "" || this.state.restManagerPassword == '' || this.state.restManagerPhone == ''){
             this.state.name == '' ? this.setState({errorName: true}) : this.setState({errorName: false})
             this.state.rfc == '' ? this.setState({errorRFC: true}) : this.setState({errorRFC: false})
@@ -79,27 +73,27 @@ class EditRestaurantForm extends Component {
             this.state.restManagerEmail == '' ? this.setState({errorRestManagerEmail: true}) : this.setState({errorRestManagerEmail: false})
             this.state.restManagerPassword == '' ? this.setState({errorRestManagerPassword: true}) : this.setState({errorRestManagerPassword: false})
             this.state.restManagerPhone == '' ? this.setState({errorRestManagerPhone: true}) : this.setState({errorRestManagerPhone: false})
-        }else{
+        }else{ //FIELDS FILLED
             ManageRestaurantService.updateRestaurant(this.state._id, this.state)
                 .then(
                     response => {
+                        //REDIRECT TO THE 'MAIN'. TABLE WITH ALL THE RESTAURANTS.
                         this.props.history.push(`/restaurants`)
-                        //this.setState({ restaurants: response.data })
                     }
                 )
         }
     }
 
+    //HANDLE CHANGE IN TEXT FIELDS
     handleChange = event => {
         const { value, name } = event.target;
         this.setState({
             ...this.state,
             [name]: value
         });
-        console.log("HAndle change")
-        console.log(this.state)
     };
 
+    //HANDLE CHANGE WHEN ICON IS CLICKED AND PASSWORD SHOULD SHOW OR NOT.
     handleClickShowPassword = event => {
         this.state.showPassword == true ?
             this.setState({
@@ -114,7 +108,6 @@ class EditRestaurantForm extends Component {
 
     render() {
         return (
-
             <div>
                 <Navbar/>
                 <div className="content">
@@ -242,9 +235,6 @@ class EditRestaurantForm extends Component {
                     </GridContainer>
                 </div>
             </div>
-
-
-
         )
     }
 }
