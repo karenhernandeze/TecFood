@@ -58,6 +58,7 @@ class DashboardPage extends Component {
         this.handleClose = this.handleClose.bind(this);
         this.handleClickOpen = this.handleClickOpen.bind(this);
         this.setOrderAsMissed = this.setOrderAsMissed.bind(this);
+        this.refreshOrders = this.refreshOrders.bind(this);
     }
 
     //GET ALL ORDERS
@@ -68,7 +69,7 @@ class DashboardPage extends Component {
 
     //METHOD USED TO GET ALL ORDERS
     refreshOrders() {
-        ManageDeliveryService.retrieveAllOrders()
+        ManageDeliveryService.retrieveAllOrders(this.props.match.params.id)
             .then(
                 response => {
                     console.log(response);
@@ -162,6 +163,19 @@ class DashboardPage extends Component {
     //SET ORDER AS MISSED
     setOrderAsInProgress (id){
         ManageDeliveryService.setOrderAsInProgress(id).then(
+            response => {
+                this.refreshOrders()
+            }
+        )
+        this.setState({
+            ...this.state,
+            open: false
+        });
+    }
+
+    //SET ORDER AS MISSED
+    setOrderAsReady (id){
+        ManageDeliveryService.setOrderAsReady(id).then(
             response => {
                 this.refreshOrders()
             }
@@ -436,6 +450,10 @@ class DashboardPage extends Component {
                                             <Button onClick={() => {this.setOrderAsCancelled(this.state.order._id)}} color="danger">
                                                 Cancel
                                                 <Block className={"icon"}/>
+                                            </Button>
+                                            <Button onClick={() => {this.setOrderAsReady(this.state.order._id)}} color="success">
+                                                Ready
+                                                <Done className={"icon"}/>
                                             </Button>
 
                                         </>) :
