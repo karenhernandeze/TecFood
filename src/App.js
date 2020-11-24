@@ -11,12 +11,15 @@ import CreateRestaurantForm from "./components/CreateRestaurantForm/CreateRestau
 import EditRestaurantForm from "./components/EditRestaurantForm/EditRestaurantForm";
 import AdminMain from "./layouts/AdminMain";
 import AdminEditMain from "./layouts/AdminEditMain";
+import LoginForm from "./components/LoginForm/login-form";
 
 class App extends Component {
     render() {
         return (
             <Router>
                 <Switch>
+                    {/*LOGIN*/}
+                    <Route path="/" exact component={LoginForm} />
                     {/*RETRIEVE ORDERS BY RESTAURANT ID*/}
                     <Route path="/orders/:id" exact component={Admin} />
                     {/*RETRIEVE ITEMS BY RESTAURANT ID */}

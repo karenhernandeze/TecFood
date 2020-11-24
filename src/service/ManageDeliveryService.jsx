@@ -1,15 +1,13 @@
 import axios from 'axios'
 
 const manageDeliveryAPI = 'https://tecfood.herokuapp.com/api/orders'
-//const manageDeliveryAPI = 'http://localhost:3000/orders'
-
 
 export class ManageDeliveryService {
 
-    async retrieveAllOrders() {
+    async retrieveAllOrders(restId) {
         console.log( "COURSE DATA SERVICE : RETRIEVE ALL COURSES")
         try{
-            const data =  axios.get(manageDeliveryAPI);
+            const data =  axios.get(`${manageDeliveryAPI}/${restId}`);
             return data;
         }catch (err) {
             console.log(err);
@@ -66,6 +64,17 @@ export class ManageDeliveryService {
         console.log("update order to cancel")
         try{
             const data = axios.put(`${manageDeliveryAPI}/cancel/${id}`);
+            return data;
+        } catch (err) {
+            console.log(err);
+            return err.message
+        }
+    }
+
+    async setOrderAsReady (id) {
+        console.log("update order to ready")
+        try{
+            const data = axios.put(`${manageDeliveryAPI}/ready/${id}`);
             return data;
         } catch (err) {
             console.log(err);
