@@ -92,66 +92,69 @@ class LoginForm extends Component {
         return(
             <div>
                 <Navbar/>
-                    <GridContainer class="center" className="dialog">
-                        <GridItem >
-                            <Card className={"dialog"}  >
-                                <CardHeader className={"header"} color="info">
-                                </CardHeader>
-                                <CardBody >
-                                    <div><br/> </div>
-                                    <GridContainer class={"grid"}>
-                                        <GridItem>
-                                            <Input
-                                                required
-                                                error={this.state.error}
-                                                fullWidth="195px"
-                                                type={this.state.showPassword ? 'text' : 'password'}
-                                                type = 'text'
-                                                name="email"
-                                                placeholder="Email"
-                                                id="email"
-                                                onChange={this.handleChange}
-                                                defaultValue={this.email}
-                                            />
-                                        </GridItem>
-                                    </GridContainer>
-                                    <div><br/> </div>
-                                    <GridContainer class={"grid"}>
-                                        <GridItem>
-                                            <Input
-                                                label="Outlined" variant="outlined"
-                                                required
-                                                error={this.state.password}
-                                                fullWidth="195px"
-                                                type={this.state.showPassword ? 'text' : 'password'}
-                                                name="password"
-                                                placeholder="Manager Password *"
-                                                id="password"
-                                                onChange={this.handleChange}
-                                                defaultValue={this.password}
-                                                endAdornment={
-                                                    <InputAdornment position="end">
-                                                        <IconButton
-                                                            aria-label="toggle password visibility"
-                                                            onClick={this.handleClickShowPassword}
-                                                            onMouseDown={this.handleMouseDownPassword}
-                                                            edge="end"
-                                                        >
-                                                            {(this.state.showPassword) ? <Visibility/> : <VisibilityOff/>}
-                                                        </IconButton>
-                                                    </InputAdornment>
-                                                }
-                                            />
-                                        </GridItem>
-                                    </GridContainer>
-                                </CardBody>
-                                <CardFooter>
-                                    <Button color={"info"} onClick ={this.login}>Log In</Button>
-                                </CardFooter>
-                            </Card>
-                        </GridItem>
-                    </GridContainer>
-                </div>
+                <GridContainer class="center" className="dialog">
+                    <GridItem >
+                        <Card className={"dialog"}  >
+                            <CardHeader className={"header"} color="info">
+                            </CardHeader>
+                            <CardBody >
+                                <div><br/> </div>
+                                <GridContainer class={"grid"}>
+                                    <GridItem>
+                                        <Input
+                                            required
+                                            error={this.state.error}
+                                            fullWidth="195px"
+                                            type={this.state.showPassword ? 'text' : 'password'}
+                                            type = 'text'
+                                            name="email"
+                                            placeholder="Email"
+                                            id="email"
+                                            onChange={this.handleChange}
+                                            defaultValue={this.email}
+                                        />
+                                    </GridItem>
+                                </GridContainer>
+                                <div><br/> </div>
+                                <GridContainer class={"grid"}>
+                                    <GridItem>
+                                        <Input
+                                            label="Outlined" variant="outlined"
+                                            required
+                                            error={this.state.error}
+                                            fullWidth="195px"
+                                            type={this.state.showPassword ? 'text' : 'password'}
+                                            name="password"
+                                            placeholder="Manager Password *"
+                                            id="password"
+                                            onChange={this.handleChange}
+                                            defaultValue={this.password}
+                                            endAdornment={
+                                                <InputAdornment position="end">
+                                                    <IconButton
+                                                        aria-label="toggle password visibility"
+                                                        onClick={this.handleClickShowPassword}
+                                                        onMouseDown={this.handleMouseDownPassword}
+                                                        edge="end"
+                                                    >
+                                                        {(this.state.showPassword) ? <Visibility/> : <VisibilityOff/>}
+                                                    </IconButton>
+                                                </InputAdornment>
+                                            }
+                                        />
+                                    </GridItem>
+                                </GridContainer>
+                                {
+                                    this.state.error === true ? <> <br/><label color={"red"}> *Incorrect Email or Password</label></> : null
+                                }
+                            </CardBody>
+                            <CardFooter>
+                                <Button color={"info"} onClick ={this.login}>Log In</Button>
+                            </CardFooter>
+                        </Card>
+                    </GridItem>
+                </GridContainer>
+            </div>
         )
     }
 }

@@ -31,3 +31,8 @@
     font-size: 20px;
     height: 30px;
 }
+
+label {
+    color: red;
+    display: block;
+}
