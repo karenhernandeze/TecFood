@@ -17,6 +17,8 @@ import Danger from "../../building_blocks/Typography/Danger";
 import ErrorIcon from '@material-ui/icons/Error';
 import Snackbar from "../../building_blocks/Snackbar/Snackbar";
 import AddAlert from "@material-ui/icons/AddAlert";
+import {withRouter} from "react-router-dom";
+
 class DeliveryOnLocation extends Component {
     constructor(props) {
         super(props)
@@ -258,4 +260,4 @@ class DeliveryOnLocation extends Component {
     }
 }
 
-export default DeliveryOnLocation
+export default withRouter (DeliveryOnLocation)
