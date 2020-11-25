@@ -24,7 +24,7 @@ class DeliveryOnLocation extends Component {
             order: {
                 _id: '',
                 customerName: '',
-                restaurantId:'',
+                restaurantId:this.props.match.params.id,
                 customerId:'',
                 orderDescription:'',
                 orderNumber:'',
@@ -42,8 +42,8 @@ class DeliveryOnLocation extends Component {
     }
 
     //CALL SERVICE TO GET THE INFORMATION OF AND ORDER BY ID
-    searchOrderById(id) {
-        ManageDeliveryService.retrieveOrderById(id) //GET ORDER
+    searchOrderById(restId, id) {
+        ManageDeliveryService.retrieveOrderById(restId, id) //GET ORDER
             .then(
                 response => {
                     console.log(response)
@@ -173,7 +173,7 @@ class DeliveryOnLocation extends Component {
                             <div><br/> </div>
                         </CardBody>
                         <CardFooter>
-                            <Button color="info" onClick={() => this.searchOrderById(this.state.id)}>Search</Button>
+                            <Button color="info" onClick={() => this.searchOrderById(this.state.order.restaurantId ,this.state.id)}>Search</Button>
                         </CardFooter>
                     </Card>
                     <Dialog

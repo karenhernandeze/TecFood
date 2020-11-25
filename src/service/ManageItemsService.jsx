@@ -1,13 +1,13 @@
 import axios from 'axios'
-const manageItemAPI = 'https://tecfood.herokuapp.com/api/' +
-    'restaurant/5f52e7ac97345cbcabcfc829/item'
+const manageItemAPItest = 'https://tecfood.herokuapp.com/api/restaurant'///5f52e7ac97345cbcabcfc829/item'
 const url = 'https://api.cloudinary.com/v1_1/dzuxehghe/image/upload';
 
 export class ManageItemsService {
 
-    async retrieveAllItems() {
+    async retrieveAllItems(id) {
         try{
-            const data =  axios.get(manageItemAPI);
+            // console.log(manageItemAPItest+id+"/item")
+            const data =  axios.get(`${manageItemAPItest}/${id}/item`);
             return data;
         }catch (err) {
             console.log(err);
@@ -15,9 +15,11 @@ export class ManageItemsService {
         }
     }
 
-    async retrieveItemById(id) {
+    async retrieveItemById(restId, itemId) {
         try{
-            const data =  axios.get(`${manageItemAPI}/${id}`);
+            console.log("API")
+            console.log(`${manageItemAPItest}/${restId}/item/${itemId}`);
+            const data = axios.get(`${manageItemAPItest}/${restId}/item/${itemId}`)
             return data;
         }catch (err) {
             console.log(err);
@@ -28,7 +30,7 @@ export class ManageItemsService {
     async disableAvailability(id) {
         console.log( "disableAvailability")
         try{
-            const data =  axios.put(`${manageItemAPI}/disable/${id}`);
+            const data =  axios.put(`${manageItemAPItest}/disable/${id}`);
             return data;
         }catch (err) {
             console.log(err);
@@ -39,7 +41,7 @@ export class ManageItemsService {
     async enableAvailability(id) {
         console.log( "enable")
         try{
-            const data =  axios.put(`${manageItemAPI}/enable/${id}`);
+            const data =  axios.put(`${manageItemAPItest}/enable/${id}`);
             return data;
         }catch (err) {
             console.log(err);
@@ -47,10 +49,11 @@ export class ManageItemsService {
         }
     }
 
-    async createNewItem(item) {
+    async createNewItem(item, id) {
         console.log( "create new")
         try{
-            const data =  axios.post(`${manageItemAPI}`, item);
+            console.log(id)
+            const data =  axios.post(`${manageItemAPItest}/${id}/item`, item);
             return data;
         }catch (err) {
             console.log(err);
@@ -58,10 +61,10 @@ export class ManageItemsService {
         }
     }
 
-    async updateItem(id, item) {
+    async updateItem(restId, id, item) {
         console.log( "UPDATE FORM")
         try{
-            const data =  axios.put(`${manageItemAPI}/${id}`, item);
+            const data =  axios.put(`${manageItemAPItest}/${restId}/item/${id}`, item);
             return data;
         }catch (err) {
             console.log(err);

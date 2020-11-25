@@ -58,7 +58,7 @@ class LoginForm extends Component {
         } else if (this.state.role === "Cashier"){
             this.props.history.push(`/orders/${this.state.restaurantId}`)
         } else if (this.state.role === "Courier"){
-            this.props.history.push(`/order/dol`)
+            this.props.history.push(`/order/dol/${this.state.restaurantId}`)
         } else {
             this.props.history.push(`/`)
         }

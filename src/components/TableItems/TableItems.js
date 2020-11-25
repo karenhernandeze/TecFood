@@ -18,6 +18,7 @@ class TableItems extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            restId: this.props.match.params.id,
             items: [],
             item: {
                 _id:'',
@@ -43,7 +44,7 @@ class TableItems extends Component {
 
     //RETRIEVE ALL ITEMS FROM THE SERVICE
     refreshItems() {
-        ManageItemsService.retrieveAllItems()
+        ManageItemsService.retrieveAllItems(this.props.match.params.id)
             .then(
                 response => {
                     this.setState({ items: response.data })
@@ -61,7 +62,10 @@ class TableItems extends Component {
 
     //REDIRECT TO THE CREATE ITEM FORM
     addNewItem() {
-        this.props.history.push(`/item`)
+        console.log(this.props)
+        this.props.history.push(`/item/${this.state.restId}`)
+
+        // this.props.history.push(/item)
     }
 
     //HANDLE CHANGE FOR THE CHECKBOXES FOR 'AVAILABILITY' STATUS.
@@ -98,8 +102,9 @@ class TableItems extends Component {
     };
 
     //REDIRECT TO THE EDIT FORM
-    updateItem(id) {
-        this.props.history.push(`/item/${id}`)
+    updateItem(restId, id) {
+        //console.log('update ' + id)
+        this.props.history.push(`/item/${restId}/edit/${id}`)
     }
 
     render(){
@@ -152,7 +157,7 @@ class TableItems extends Component {
                                                     />
                                                 ],
                                                 [item.includedSides + ''],
-                                                [<Button color={"warning"} onClick={() => this.updateItem(item._id)}> Edit </Button>]
+                                                [<Button color={"warning"} onClick={() => this.updateItem(this.state.restId, item._id)}> Edit </Button>]
                                             ],
                                     )}
                             />

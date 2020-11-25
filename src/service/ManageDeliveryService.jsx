@@ -15,10 +15,10 @@ export class ManageDeliveryService {
         }
     }
 
-    async retrieveOrderById (id){
+    async retrieveOrderById (restId, id){
         console.log("RETRIEVE ORDER BY ID")
         try{
-            const data = axios.get(`${manageDeliveryAPI}/${id}`)
+            const data = axios.get(`${manageDeliveryAPI}/${restId}/${id}`)
             return data;
         }catch (err) {
             console.log(err);

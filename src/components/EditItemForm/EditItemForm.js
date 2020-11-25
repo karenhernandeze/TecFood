@@ -26,7 +26,7 @@ class EditItemForm extends Component {
             image:'',
             availability: true,
             includedSides: '',
-            restaurantId: "5f52e7ac97345cbcabcfc829",
+            restaurantId: this.props.match.params.restId,
             errorName: false,
             errorDescription: false,
             errorPrice: false,
@@ -42,15 +42,19 @@ class EditItemForm extends Component {
 
     //METHOD USED TO GET INFORMATION FROM DATA BASE, RETRIEVE ALL THE INFORMATION FOR THE ITEMS
     refreshItems() {
-        ManageItemsService.retrieveItemById(this.state._id)
+        ManageItemsService.retrieveItemById(this.state.restaurantId, this.state._id)
             .then(
-                response=> {this.setState({
-                    name: response.data.name,
-                    price: response.data.price,
-                    description: response.data.description,
-                    includedSides: response.data.includedSides,
-                    image: response.data.image
-                })}
+                response=> {
+                    this.setState({
+                        name: response.data[0].name,
+                        price: response.data[0].price,
+                        description: response.data[0].description,
+                        includedSides: response.data[0].includedSides,
+                        image: response.data[0].image
+                    })
+                    console.log(this.state)
+                }
+
             )
     }
 
@@ -70,11 +74,11 @@ class EditItemForm extends Component {
                 image: linkPhoto
             });
             //UPDATE ITEM WITH THE STATE OF THE IMAGE UPDATED
-            ManageItemsService.updateItem(this.state._id, this.state)
+            ManageItemsService.updateItem(this.state.restaurantId ,this.state._id, this.state)
                 .then(
                     response => {
-                        this.props.history.push(`/items`)
                         this.setState({ items: response.data })
+                        this.props.history.push(`/items/${this.state.restaurantId}/`)
                     }
                 )
         }

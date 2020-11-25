@@ -25,9 +25,9 @@ class App extends Component {
                     {/*RETRIEVE ITEMS BY RESTAURANT ID */}
                     <Route path="/items/:id" exact component={AdminItems} />
                     {/*CREATE FORM FOR ITEMS*/}
-                    <Route path="/item" exact component={CreateItemForm}/>
+                    <Route path="/item/:restId" exact component={CreateItemForm}/>
                     {/*EDIT FORM FOR ITEMS*/}
-                    <Route path="/item/:id" exact component={EditItemForm}/>
+                    <Route path="/item/:restId/edit/:id" exact component={EditItemForm}/>
                     {/*RETRIEVE ALL RESTAURANTS*/}
                     <Route path="/restaurants" exact component={AdminRestaurants} />
                     {/*CREAT FORM FOR RESTAURANTS*/}
@@ -35,7 +35,7 @@ class App extends Component {
                     {/*EDIT FORM FOR RESTAURANTS*/}
                     <Route path="/restaurant/:id" exact component={EditRestaurantForm} />
                     {/*DELIVER ON LOCATION FORM*/}
-                    <Route path="/order/dol" exact component={AdminDeliveryOnLocation} />
+                    <Route path="/order/dol/:id" exact component={AdminDeliveryOnLocation} />
                     {/*MAIN FORM*/}
                     <Route path="/:id/main" exact component={AdminMain} />
                     {/*EDIT MAIN FORM*/}
